@@ -1,20 +1,6 @@
-// Copyright 2014 Google Inc.
+// Package bplustree implements in-memory B-Plus-Trees of arbitrary degree.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// Package btree implements in-memory B-Trees of arbitrary degree.
-//
-// btree implements an in-memory B-Tree for use as an ordered data structure.
+// bplustree implements an in-memory B-Plus-Tree for use as an ordered data structure.
 // It is not meant for persistent storage solutions.
 //
 // It has a flatter structure than an equivalent red-black or other binary tree,
@@ -66,6 +52,7 @@ type Item interface {
 }
 
 const (
+	// DefaultFreeListSize free list size if not specified
 	DefaultFreeListSize = 32
 )
 
@@ -171,6 +158,12 @@ func (s *items) pop() (out Item) {
 	return
 }
 
+func (s items) getLast() (out Item) {
+	index := len(s) - 1
+	out = s[index]
+	return
+}
+
 // truncate truncates this instance at index so that it contains only the
 // first index items. index must be less than or equal to length.
 func (s *items) truncate(index int) {
@@ -247,6 +240,9 @@ type node struct {
 	cow      *copyOnWriteContext
 }
 
+// Node type
+type Node node
+
 func (n *node) mutableFor(cow *copyOnWriteContext) *node {
 	if n.cow == cow {
 		return n
@@ -274,6 +270,10 @@ func (n *node) mutableChild(i int) *node {
 	return c
 }
 
+func (n *node) isLeaf() bool {
+	return len(n.children) == 0
+}
+
 // split splits the given node at the given index.  The current node shrinks,
 // and this function returns the item that existed at that index and a new node
 // containing all items/children after it.
@@ -281,8 +281,11 @@ func (n *node) split(i int) (Item, *node) {
 	item := n.items[i]
 	next := n.cow.newNode()
 	next.items = append(next.items, n.items[i+1:]...)
-	n.items.truncate(i)
-	if len(n.children) > 0 {
+
+	if n.isLeaf() {
+		n.items.truncate(i + 1)
+	} else {
+		n.items.truncate(i)
 		next.children = append(next.children, n.children[i+1:]...)
 		n.children.truncate(i + 1)
 	}
@@ -307,12 +310,12 @@ func (n *node) maybeSplitChild(i, maxItems int) bool {
 // be found/replaced by insert, it will be returned.
 func (n *node) insert(item Item, maxItems int) Item {
 	i, found := n.items.find(item)
-	if found {
-		out := n.items[i]
-		n.items[i] = item
-		return out
-	}
 	if len(n.children) == 0 {
+		if found {
+			out := n.items[i]
+			n.items[i] = item
+			return out
+		}
 		n.items.insertAt(i, item)
 		return nil
 	}
@@ -335,7 +338,7 @@ func (n *node) insert(item Item, maxItems int) Item {
 // get finds the given key in the subtree and returns it.
 func (n *node) get(key Item) Item {
 	i, found := n.items.find(key)
-	if found {
+	if found && n.isLeaf() {
 		return n.items[i]
 	} else if len(n.children) > 0 {
 		return n.children[i].get(key)
@@ -408,28 +411,19 @@ func (n *node) remove(item Item, minItems int, typ toRemove) Item {
 	}
 	// If we get to here, we have children.
 	if len(n.children[i].items) <= minItems {
-		return n.growChildAndRemove(i, item, minItems, typ)
+		n.growChild(i, item, minItems)
+		// redo this step after grow child
+		return n.remove(item, minItems, typ)
 	}
 	child := n.mutableChild(i)
 	// Either we had enough items to begin with, or we've done some
 	// merging/stealing, because we've got enough now and we're ready to return
 	// stuff.
-	if found {
-		// The item exists at index 'i', and the child we've selected can give us a
-		// predecessor, since if we've gotten here it's got > minItems items in it.
-		out := n.items[i]
-		// We use our special-case 'remove' call with typ=maxItem to pull the
-		// predecessor of item i (the rightmost leaf of our immediate left child)
-		// and set it into where we pulled the item from.
-		n.items[i] = child.remove(nil, minItems, removeMax)
-		return out
-	}
-	// Final recursive call.  Once we're here, we know that the item isn't in this
-	// node and that the child is big enough to remove from.
+	// Final recursive call.
 	return child.remove(item, minItems, typ)
 }
 
-// growChildAndRemove grows child 'i' to make sure it's possible to remove an
+// growChild grows child 'i' to make sure it's possible to remove an
 // item from it while keeping it at minItems, then calls remove to actually
 // remove it.
 //
@@ -448,15 +442,19 @@ func (n *node) remove(item Item, minItems int, typ toRemove) Item {
 // We then simply redo our remove call, and the second time (regardless of
 // whether we're in case 1 or 2), we'll have enough items and can guarantee
 // that we hit case A.
-func (n *node) growChildAndRemove(i int, item Item, minItems int, typ toRemove) Item {
+func (n *node) growChild(i int, item Item, minItems int) {
 	if i > 0 && len(n.children[i-1].items) > minItems {
 		// Steal from left child
 		child := n.mutableChild(i)
 		stealFrom := n.mutableChild(i - 1)
 		stolenItem := stealFrom.items.pop()
-		child.items.insertAt(0, n.items[i-1])
-		n.items[i-1] = stolenItem
-		if len(stealFrom.children) > 0 {
+
+		if child.isLeaf() {
+			child.items.insertAt(0, stolenItem)
+			n.items[i-1] = stealFrom.items.getLast()
+		} else {
+			child.items.insertAt(0, n.items[i-1])
+			n.items[i-1] = stolenItem
 			child.children.insertAt(0, stealFrom.children.pop())
 		}
 	} else if i < len(n.items) && len(n.children[i+1].items) > minItems {
@@ -464,11 +462,14 @@ func (n *node) growChildAndRemove(i int, item Item, minItems int, typ toRemove) 
 		child := n.mutableChild(i)
 		stealFrom := n.mutableChild(i + 1)
 		stolenItem := stealFrom.items.removeAt(0)
-		child.items = append(child.items, n.items[i])
-		n.items[i] = stolenItem
-		if len(stealFrom.children) > 0 {
+
+		if child.isLeaf() {
+			child.items = append(child.items, stolenItem)
+		} else {
+			child.items = append(child.items, n.items[i])
 			child.children = append(child.children, stealFrom.children.removeAt(0))
 		}
+		n.items[i] = stolenItem
 	} else {
 		if i >= len(n.items) {
 			i--
@@ -477,12 +478,13 @@ func (n *node) growChildAndRemove(i int, item Item, minItems int, typ toRemove) 
 		// merge with right child
 		mergeItem := n.items.removeAt(i)
 		mergeChild := n.children.removeAt(i + 1)
-		child.items = append(child.items, mergeItem)
+		if !child.isLeaf() {
+			child.items = append(child.items, mergeItem)
+			child.children = append(child.children, mergeChild.children...)
+		}
 		child.items = append(child.items, mergeChild.items...)
-		child.children = append(child.children, mergeChild.children...)
 		n.cow.freeNode(mergeChild)
 	}
-	return n.remove(item, minItems, typ)
 }
 
 type direction int
@@ -568,10 +570,10 @@ func (n *node) iterate(dir direction, start, stop Item, includeStart bool, hit b
 }
 
 // Used for testing/debugging purposes.
-func (n *node) print(w io.Writer, level int) {
+func (n *node) Print(w io.Writer, level int) {
 	fmt.Fprintf(w, "%sNODE:%v\n", strings.Repeat("  ", level), n.items)
 	for _, c := range n.children {
-		c.print(w, level+1)
+		c.Print(w, level+1)
 	}
 }
 
@@ -667,12 +669,12 @@ func (c *copyOnWriteContext) freeNode(n *node) freeType {
 		n.cow = nil
 		if c.freelist.freeNode(n) {
 			return ftStored
-		} else {
-			return ftFreelistFull
 		}
-	} else {
-		return ftNotOwned
+
+		return ftFreelistFull
 	}
+
+	return ftNotOwned
 }
 
 // ReplaceOrInsert adds the given item to the tree.  If an item in the tree
@@ -689,16 +691,17 @@ func (t *BTree) ReplaceOrInsert(item Item) Item {
 		t.root.items = append(t.root.items, item)
 		t.length++
 		return nil
-	} else {
-		t.root = t.root.mutableFor(t.cow)
-		if len(t.root.items) >= t.maxItems() {
-			item2, second := t.root.split(t.maxItems() / 2)
-			oldroot := t.root
-			t.root = t.cow.newNode()
-			t.root.items = append(t.root.items, item2)
-			t.root.children = append(t.root.children, oldroot, second)
-		}
 	}
+
+	t.root = t.root.mutableFor(t.cow)
+	if len(t.root.items) >= t.maxItems() {
+		item2, second := t.root.split(t.maxItems() / 2)
+		oldroot := t.root
+		t.root = t.cow.newNode()
+		t.root.items = append(t.root.items, item2)
+		t.root.children = append(t.root.children, oldroot, second)
+	}
+
 	out := t.root.insert(item, t.maxItems())
 	if out == nil {
 		t.length++
@@ -840,6 +843,11 @@ func (t *BTree) Has(key Item) bool {
 // Len returns the number of items currently in the tree.
 func (t *BTree) Len() int {
 	return t.length
+}
+
+// GetRoot returns the number of items currently in the tree.
+func (t *BTree) GetRoot() *node {
+	return t.root
 }
 
 // Clear removes all items from the btree.  If addNodesToFreelist is true,
