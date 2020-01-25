@@ -1,14 +1,8 @@
-// Package bplustree implements in-memory B-Plus-Trees of arbitrary degree.
+// Package bplustree implements in-memory B-Plus-Trees of arbitrary degree
+// for use as an ordered data structure. It is not meant for persistent storage solutions.
 //
-// bplustree implements an in-memory B-Plus-Tree for use as an ordered data structure.
-// It is not meant for persistent storage solutions.
-//
-// It has a flatter structure than an equivalent red-black or other binary tree,
-// which in some cases yields better memory usage and/or performance.
-// See some discussion on the matter here:
-//   http://google-opensource.blogspot.com/2013/01/c-containers-that-save-memory-and-time.html
-// Note, though, that this project is in no way related to the C++ B-Tree
-// implementation written about there.
+// It's based on original Google Bplustree implementation
+//   https://github.com/google/bplustree
 //
 // Within this tree, each node contains a slice of items and a (possibly nil)
 // slice of children.  For basic numeric values or raw structs, this can cause
@@ -25,12 +19,7 @@
 // heap-allocated structures, since C++-equivalent structures also must store
 // pointers and also distribute their values across the heap.
 //
-// This implementation is designed to be a drop-in replacement to gollrb.LLRB
-// trees, (http://github.com/petar/gollrb), an excellent and probably the most
-// widely used ordered tree implementation in the Go ecosystem currently.
-// Its functions, therefore, exactly mirror those of
-// llrb.LLRB where possible.  Unlike gollrb, though, we currently don't
-// support storing multiple equivalent values.
+// This currently don't support storing multiple equivalent values.
 package bplustree
 
 import (
@@ -61,10 +50,10 @@ var (
 	nilChildren = make(children, 16)
 )
 
-// FreeList represents a free list of btree nodes. By default each
-// BTree has its own FreeList, but multiple BTrees can share the same
+// FreeList represents a free list of bplustree nodes. By default each
+// BplusTree has its own FreeList, but multiple BplusTrees can share the same
 // FreeList.
-// Two Btrees using the same freelist are safe for concurrent write access.
+// Two Bplustrees using the same freelist are safe for concurrent write access.
 type FreeList struct {
 	mu       sync.Mutex
 	freelist []*node
@@ -111,16 +100,16 @@ type ItemIterator func(i Item) bool
 //
 // New(2), for example, will create a 2-3-4 tree (each node contains 1-3 items
 // and 2-4 children).
-func New(degree int) *BTree {
+func New(degree int) *BplusTree {
 	return NewWithFreeList(degree, NewFreeList(DefaultFreeListSize))
 }
 
 // NewWithFreeList creates a new B-Tree that uses the given node free list.
-func NewWithFreeList(degree int, f *FreeList) *BTree {
+func NewWithFreeList(degree int, f *FreeList) *BplusTree {
 	if degree <= 1 {
 		panic("bad degree")
 	}
-	return &BTree{
+	return &BplusTree{
 		degree: degree,
 		cow:    &copyOnWriteContext{freelist: f},
 	}
@@ -577,14 +566,14 @@ func (n *node) Print(w io.Writer, level int) {
 	}
 }
 
-// BTree is an implementation of a B-Tree.
+// BplusTree is an implementation of a B-Tree.
 //
-// BTree stores Item instances in an ordered structure, allowing easy insertion,
+// BplusTree stores Item instances in an ordered structure, allowing easy insertion,
 // removal, and iteration.
 //
 // Write operations are not safe for concurrent mutation by multiple
 // goroutines, but Read operations are.
-type BTree struct {
+type BplusTree struct {
 	degree int
 	length int
 	root   *node
@@ -609,7 +598,7 @@ type copyOnWriteContext struct {
 	freelist *FreeList
 }
 
-// Clone clones the btree, lazily.  Clone should not be called concurrently,
+// Clone clones the bplustree, lazily.  Clone should not be called concurrently,
 // but the original tree (t) and the new tree (t2) can be used concurrently
 // once the Clone call completes.
 //
@@ -620,7 +609,7 @@ type copyOnWriteContext struct {
 // will initially experience minor slow-downs caused by additional allocs and
 // copies due to the aforementioned copy-on-write logic, but should converge to
 // the original performance characteristics of the original tree.
-func (t *BTree) Clone() (t2 *BTree) {
+func (t *BplusTree) Clone() (t2 *BplusTree) {
 	// Create two entirely new copy-on-write contexts.
 	// This operation effectively creates three trees:
 	//   the original, shared nodes (old b.cow)
@@ -634,13 +623,13 @@ func (t *BTree) Clone() (t2 *BTree) {
 }
 
 // maxItems returns the max number of items to allow per node.
-func (t *BTree) maxItems() int {
+func (t *BplusTree) maxItems() int {
 	return t.degree*2 - 1
 }
 
 // minItems returns the min number of items to allow per node (ignored for the
 // root node).
-func (t *BTree) minItems() int {
+func (t *BplusTree) minItems() int {
 	return t.degree - 1
 }
 
@@ -682,9 +671,9 @@ func (c *copyOnWriteContext) freeNode(n *node) freeType {
 // Otherwise, nil is returned.
 //
 // nil cannot be added to the tree (will panic).
-func (t *BTree) ReplaceOrInsert(item Item) Item {
+func (t *BplusTree) ReplaceOrInsert(item Item) Item {
 	if item == nil {
-		panic("nil item being added to BTree")
+		panic("nil item being added to BplusTree")
 	}
 	if t.root == nil {
 		t.root = t.cow.newNode()
@@ -711,23 +700,23 @@ func (t *BTree) ReplaceOrInsert(item Item) Item {
 
 // Delete removes an item equal to the passed in item from the tree, returning
 // it.  If no such item exists, returns nil.
-func (t *BTree) Delete(item Item) Item {
+func (t *BplusTree) Delete(item Item) Item {
 	return t.deleteItem(item, removeItem)
 }
 
 // DeleteMin removes the smallest item in the tree and returns it.
 // If no such item exists, returns nil.
-func (t *BTree) DeleteMin() Item {
+func (t *BplusTree) DeleteMin() Item {
 	return t.deleteItem(nil, removeMin)
 }
 
 // DeleteMax removes the largest item in the tree and returns it.
 // If no such item exists, returns nil.
-func (t *BTree) DeleteMax() Item {
+func (t *BplusTree) DeleteMax() Item {
 	return t.deleteItem(nil, removeMax)
 }
 
-func (t *BTree) deleteItem(item Item, typ toRemove) Item {
+func (t *BplusTree) deleteItem(item Item, typ toRemove) Item {
 	if t.root == nil || len(t.root.items) == 0 {
 		return nil
 	}
@@ -746,7 +735,7 @@ func (t *BTree) deleteItem(item Item, typ toRemove) Item {
 
 // AscendRange calls the iterator for every value in the tree within the range
 // [greaterOrEqual, lessThan), until iterator returns false.
-func (t *BTree) AscendRange(greaterOrEqual, lessThan Item, iterator ItemIterator) {
+func (t *BplusTree) AscendRange(greaterOrEqual, lessThan Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -755,7 +744,7 @@ func (t *BTree) AscendRange(greaterOrEqual, lessThan Item, iterator ItemIterator
 
 // AscendLessThan calls the iterator for every value in the tree within the range
 // [first, pivot), until iterator returns false.
-func (t *BTree) AscendLessThan(pivot Item, iterator ItemIterator) {
+func (t *BplusTree) AscendLessThan(pivot Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -764,7 +753,7 @@ func (t *BTree) AscendLessThan(pivot Item, iterator ItemIterator) {
 
 // AscendGreaterOrEqual calls the iterator for every value in the tree within
 // the range [pivot, last], until iterator returns false.
-func (t *BTree) AscendGreaterOrEqual(pivot Item, iterator ItemIterator) {
+func (t *BplusTree) AscendGreaterOrEqual(pivot Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -773,7 +762,7 @@ func (t *BTree) AscendGreaterOrEqual(pivot Item, iterator ItemIterator) {
 
 // Ascend calls the iterator for every value in the tree within the range
 // [first, last], until iterator returns false.
-func (t *BTree) Ascend(iterator ItemIterator) {
+func (t *BplusTree) Ascend(iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -782,7 +771,7 @@ func (t *BTree) Ascend(iterator ItemIterator) {
 
 // DescendRange calls the iterator for every value in the tree within the range
 // [lessOrEqual, greaterThan), until iterator returns false.
-func (t *BTree) DescendRange(lessOrEqual, greaterThan Item, iterator ItemIterator) {
+func (t *BplusTree) DescendRange(lessOrEqual, greaterThan Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -791,7 +780,7 @@ func (t *BTree) DescendRange(lessOrEqual, greaterThan Item, iterator ItemIterato
 
 // DescendLessOrEqual calls the iterator for every value in the tree within the range
 // [pivot, first], until iterator returns false.
-func (t *BTree) DescendLessOrEqual(pivot Item, iterator ItemIterator) {
+func (t *BplusTree) DescendLessOrEqual(pivot Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -800,7 +789,7 @@ func (t *BTree) DescendLessOrEqual(pivot Item, iterator ItemIterator) {
 
 // DescendGreaterThan calls the iterator for every value in the tree within
 // the range [last, pivot), until iterator returns false.
-func (t *BTree) DescendGreaterThan(pivot Item, iterator ItemIterator) {
+func (t *BplusTree) DescendGreaterThan(pivot Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -809,7 +798,7 @@ func (t *BTree) DescendGreaterThan(pivot Item, iterator ItemIterator) {
 
 // Descend calls the iterator for every value in the tree within the range
 // [last, first], until iterator returns false.
-func (t *BTree) Descend(iterator ItemIterator) {
+func (t *BplusTree) Descend(iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
@@ -818,7 +807,7 @@ func (t *BTree) Descend(iterator ItemIterator) {
 
 // Get looks for the key item in the tree, returning it.  It returns nil if
 // unable to find that item.
-func (t *BTree) Get(key Item) Item {
+func (t *BplusTree) Get(key Item) Item {
 	if t.root == nil {
 		return nil
 	}
@@ -826,31 +815,31 @@ func (t *BTree) Get(key Item) Item {
 }
 
 // Min returns the smallest item in the tree, or nil if the tree is empty.
-func (t *BTree) Min() Item {
+func (t *BplusTree) Min() Item {
 	return min(t.root)
 }
 
 // Max returns the largest item in the tree, or nil if the tree is empty.
-func (t *BTree) Max() Item {
+func (t *BplusTree) Max() Item {
 	return max(t.root)
 }
 
 // Has returns true if the given key is in the tree.
-func (t *BTree) Has(key Item) bool {
+func (t *BplusTree) Has(key Item) bool {
 	return t.Get(key) != nil
 }
 
 // Len returns the number of items currently in the tree.
-func (t *BTree) Len() int {
+func (t *BplusTree) Len() int {
 	return t.length
 }
 
-// GetRoot returns the number of items currently in the tree.
-func (t *BTree) GetRoot() *node {
-	return t.root
+// Print prints the tree.
+func (t *BplusTree) Print(w io.Writer) {
+	t.root.Print(w, 0)
 }
 
-// Clear removes all items from the btree.  If addNodesToFreelist is true,
+// Clear removes all items from the bplustree.  If addNodesToFreelist is true,
 // t's nodes are added to its freelist as part of this call, until the freelist
 // is full.  Otherwise, the root node is simply dereferenced and the subtree
 // left to Go's normal GC processes.
@@ -870,7 +859,7 @@ func (t *BTree) GetRoot() *node {
 //   O(tree size):  when all nodes are owned by another tree, all nodes are
 //       iterated over looking for nodes to add to the freelist, and due to
 //       ownership, none are.
-func (t *BTree) Clear(addNodesToFreelist bool) {
+func (t *BplusTree) Clear(addNodesToFreelist bool) {
 	if t.root != nil && addNodesToFreelist {
 		t.root.reset(t.cow)
 	}
