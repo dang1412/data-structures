@@ -1,8 +1,8 @@
 // Package bplustree implements in-memory B-Plus-Trees of arbitrary degree
 // for use as an ordered data structure. It is not meant for persistent storage solutions.
 //
-// It's based on original Google Bplustree implementation
-//   https://github.com/google/bplustree
+// It's based on original Google Btree implementation
+//   https://github.com/google/btree
 //
 // Within this tree, each node contains a slice of items and a (possibly nil)
 // slice of children.  For basic numeric values or raw structs, this can cause
