@@ -227,6 +227,7 @@ type node struct {
 	items    items
 	children children
 	cow      *copyOnWriteContext
+	next     *node
 }
 
 // Node type
@@ -278,6 +279,8 @@ func (n *node) split(i int) (Item, *node) {
 		next.children = append(next.children, n.children[i+1:]...)
 		n.children.truncate(i + 1)
 	}
+	next.next = n.next
+	n.next = next
 	return item, next
 }
 
@@ -327,9 +330,9 @@ func (n *node) insert(item Item, maxItems int) Item {
 // get finds the given key in the subtree and returns it.
 func (n *node) get(key Item) Item {
 	i, found := n.items.find(key)
-	if found && n.isLeaf() {
+	if isLeaf := n.isLeaf(); found && isLeaf {
 		return n.items[i]
-	} else if len(n.children) > 0 {
+	} else if !isLeaf {
 		return n.children[i].get(key)
 	}
 	return nil
@@ -472,6 +475,7 @@ func (n *node) growChild(i int, item Item, minItems int) {
 			child.children = append(child.children, mergeChild.children...)
 		}
 		child.items = append(child.items, mergeChild.items...)
+		child.next = mergeChild.next
 		n.cow.freeNode(mergeChild)
 	}
 }
@@ -733,13 +737,46 @@ func (t *BplusTree) deleteItem(item Item, typ toRemove) Item {
 	return out
 }
 
+// findItems find item position
+func (t *BplusTree) findItem(item Item) (*node, int, bool) {
+	if t.root == nil {
+		return nil, -1, false
+	}
+	node := t.root
+	for !node.isLeaf() {
+		i, _ := node.items.find(item)
+		node = node.children[i]
+	}
+
+	index, found := node.items.find(item)
+	return node, index, found
+}
+
 // AscendRange calls the iterator for every value in the tree within the range
 // [greaterOrEqual, lessThan), until iterator returns false.
 func (t *BplusTree) AscendRange(greaterOrEqual, lessThan Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
-	t.root.iterate(ascend, greaterOrEqual, lessThan, true, false, iterator)
+
+	node, index, _ := t.findItem(greaterOrEqual)
+	for true {
+		if index == len(node.items) {
+			node = node.next
+			index = 0
+		}
+
+		if node == nil {
+			break
+		}
+
+		item := node.items[index]
+		if !item.Less(lessThan) || !iterator(item) {
+			break
+		}
+
+		index++
+	}
 }
 
 // AscendLessThan calls the iterator for every value in the tree within the range
