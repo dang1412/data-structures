@@ -338,14 +338,34 @@ func (n *node) get(key Item) Item {
 	return nil
 }
 
+// iterate horizontally using next pointer
+func (n *node) iterateHorizon(index int, lessThan Item, iterator ItemIterator) {
+	node := n
+	for true {
+		if index == len(node.items) {
+			node = node.next
+			index = 0
+		}
+
+		if node == nil {
+			break
+		}
+
+		item := node.items[index]
+		if (lessThan != nil && !item.Less(lessThan)) || !iterator(item) {
+			break
+		}
+
+		index++
+	}
+}
+
 // min returns the first item in the subtree.
 func min(n *node) Item {
 	if n == nil {
 		return nil
 	}
-	for len(n.children) > 0 {
-		n = n.children[0]
-	}
+	n = minNode(n)
 	if len(n.items) == 0 {
 		return nil
 	}
@@ -364,6 +384,19 @@ func max(n *node) Item {
 		return nil
 	}
 	return n.items[len(n.items)-1]
+}
+
+// get min node
+func minNode(n *node) *node {
+	if n == nil {
+		return nil
+	}
+
+	for !n.isLeaf() {
+		n = n.children[0]
+	}
+
+	return n
 }
 
 // toRemove details what item to remove in a node.remove call.
@@ -480,93 +513,11 @@ func (n *node) growChild(i int, item Item, minItems int) {
 	}
 }
 
-type direction int
-
-const (
-	descend = direction(-1)
-	ascend  = direction(+1)
-)
-
-// iterate provides a simple method for iterating over elements in the tree.
-//
-// When ascending, the 'start' should be less than 'stop' and when descending,
-// the 'start' should be greater than 'stop'. Setting 'includeStart' to true
-// will force the iterator to include the first item when it equals 'start',
-// thus creating a "greaterOrEqual" or "lessThanEqual" rather than just a
-// "greaterThan" or "lessThan" queries.
-func (n *node) iterate(dir direction, start, stop Item, includeStart bool, hit bool, iter ItemIterator) (bool, bool) {
-	var ok, found bool
-	var index int
-	switch dir {
-	case ascend:
-		if start != nil {
-			index, _ = n.items.find(start)
-		}
-		for i := index; i < len(n.items); i++ {
-			if len(n.children) > 0 {
-				if hit, ok = n.children[i].iterate(dir, start, stop, includeStart, hit, iter); !ok {
-					return hit, false
-				}
-			}
-			if !includeStart && !hit && start != nil && !start.Less(n.items[i]) {
-				hit = true
-				continue
-			}
-			hit = true
-			if stop != nil && !n.items[i].Less(stop) {
-				return hit, false
-			}
-			if !iter(n.items[i]) {
-				return hit, false
-			}
-		}
-		if len(n.children) > 0 {
-			if hit, ok = n.children[len(n.children)-1].iterate(dir, start, stop, includeStart, hit, iter); !ok {
-				return hit, false
-			}
-		}
-	case descend:
-		if start != nil {
-			index, found = n.items.find(start)
-			if !found {
-				index = index - 1
-			}
-		} else {
-			index = len(n.items) - 1
-		}
-		for i := index; i >= 0; i-- {
-			if start != nil && !n.items[i].Less(start) {
-				if !includeStart || hit || start.Less(n.items[i]) {
-					continue
-				}
-			}
-			if len(n.children) > 0 {
-				if hit, ok = n.children[i+1].iterate(dir, start, stop, includeStart, hit, iter); !ok {
-					return hit, false
-				}
-			}
-			if stop != nil && !stop.Less(n.items[i]) {
-				return hit, false //	continue
-			}
-			hit = true
-			if !iter(n.items[i]) {
-				return hit, false
-			}
-		}
-		if len(n.children) > 0 {
-			if hit, ok = n.children[0].iterate(dir, start, stop, includeStart, hit, iter); !ok {
-				return hit, false
-			}
-		}
-	}
-	return hit, true
-}
-
 // Used for testing/debugging purposes.
-func (n *node) Print(w io.Writer, level int) {
+func (n *node) print(w io.Writer, level int) {
 	fmt.Fprintf(w, "%sNODE:%v\n", strings.Repeat("  ", level), n.items)
 	for _, c := range n.children {
-		c.Print(w, level+1)
+		c.print(w, level+1)
 	}
 }
 
@@ -759,24 +710,8 @@ func (t *BplusTree) AscendRange(greaterOrEqual, lessThan Item, iterator ItemIter
 		return
 	}
 
-	node, index, _ := t.findItem(greaterOrEqual)
-	for true {
-		if index == len(node.items) {
-			node = node.next
-			index = 0
-		}
-
-		if node == nil {
-			break
-		}
-
-		item := node.items[index]
-		if !item.Less(lessThan) || !iterator(item) {
-			break
-		}
-
-		index++
-	}
+	n, index, _ := t.findItem(greaterOrEqual)
+	n.iterateHorizon(index, lessThan, iterator)
 }
 
 // AscendLessThan calls the iterator for every value in the tree within the range
@@ -785,7 +720,10 @@ func (t *BplusTree) AscendLessThan(pivot Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
-	t.root.iterate(ascend, nil, pivot, false, false, iterator)
+
+	// get min node
+	n := minNode(t.root)
+	n.iterateHorizon(0, pivot, iterator)
 }
 
 // AscendGreaterOrEqual calls the iterator for every value in the tree within
@@ -794,7 +732,9 @@ func (t *BplusTree) AscendGreaterOrEqual(pivot Item, iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
-	t.root.iterate(ascend, pivot, nil, true, false, iterator)
+
+	n, index, _ := t.findItem(pivot)
+	n.iterateHorizon(index, nil, iterator)
 }
 
 // Ascend calls the iterator for every value in the tree within the range
@@ -803,43 +743,10 @@ func (t *BplusTree) Ascend(iterator ItemIterator) {
 	if t.root == nil {
 		return
 	}
-	t.root.iterate(ascend, nil, nil, false, false, iterator)
-}
 
-// DescendRange calls the iterator for every value in the tree within the range
-// [lessOrEqual, greaterThan), until iterator returns false.
-func (t *BplusTree) DescendRange(lessOrEqual, greaterThan Item, iterator ItemIterator) {
-	if t.root == nil {
-		return
-	}
-	t.root.iterate(descend, lessOrEqual, greaterThan, true, false, iterator)
-}
-
-// DescendLessOrEqual calls the iterator for every value in the tree within the range
-// [pivot, first], until iterator returns false.
-func (t *BplusTree) DescendLessOrEqual(pivot Item, iterator ItemIterator) {
-	if t.root == nil {
-		return
-	}
-	t.root.iterate(descend, pivot, nil, true, false, iterator)
-}
-
-// DescendGreaterThan calls the iterator for every value in the tree within
-// the range [last, pivot), until iterator returns false.
-func (t *BplusTree) DescendGreaterThan(pivot Item, iterator ItemIterator) {
-	if t.root == nil {
-		return
-	}
-	t.root.iterate(descend, nil, pivot, false, false, iterator)
-}
-
-// Descend calls the iterator for every value in the tree within the range
-// [last, first], until iterator returns false.
-func (t *BplusTree) Descend(iterator ItemIterator) {
-	if t.root == nil {
-		return
-	}
-	t.root.iterate(descend, nil, nil, false, false, iterator)
+	// get min node
+	n := minNode(t.root)
+	n.iterateHorizon(0, nil, iterator)
 }
 
 // Get looks for the key item in the tree, returning it.  It returns nil if
@@ -873,7 +780,7 @@ func (t *BplusTree) Len() int {
 
 // Print prints the tree.
 func (t *BplusTree) Print(w io.Writer) {
-	t.root.Print(w, 0)
+	t.root.print(w, 0)
 }
 
 // Clear removes all items from the bplustree.  If addNodesToFreelist is true,
