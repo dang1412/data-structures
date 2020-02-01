@@ -230,9 +230,6 @@ type node struct {
 	next     *node
 }
 
-// Node type
-type Node node
-
 func (n *node) mutableFor(cow *copyOnWriteContext) *node {
 	if n.cow == cow {
 		return n
@@ -313,15 +310,9 @@ func (n *node) insert(item Item, maxItems int) Item {
 	}
 	if n.maybeSplitChild(i, maxItems) {
 		inTree := n.items[i]
-		switch {
-		case item.Less(inTree):
-			// no change, we want first split node
-		case inTree.Less(item):
-			i++ // we want second split node
-		default:
-			out := n.items[i]
-			n.items[i] = item
-			return out
+		if inTree.Less(item) {
+			// we want second split node
+			i++
 		}
 	}
 	return n.mutableChild(i).insert(item, maxItems)
@@ -330,9 +321,11 @@ func (n *node) insert(item Item, maxItems int) Item {
 // get finds the given key in the subtree and returns it.
 func (n *node) get(key Item) Item {
 	i, found := n.items.find(key)
-	if isLeaf := n.isLeaf(); found && isLeaf {
+	isLeaf := n.isLeaf()
+	if found && isLeaf {
 		return n.items[i]
-	} else if !isLeaf {
+	}
+	if !isLeaf {
 		return n.children[i].get(key)
 	}
 	return nil
