@@ -1,12 +1,15 @@
-export type CompareFunc<T> = (t1: T, t2: T) => -1 | 0 | 1;
+export type Comparator<T> = (t1: T, t2: T) => -1 | 0 | 1;
+
+const DEFAULT_COMPARATOR: Comparator<any> = (a, b) => {
+  return a < b ? -1 : a == b ? 0 : 1;
+}
 
 export class BPlusTreeNode<T> {
   items: T[];
   children: BPlusTreeNode<T>[] = [];
-  next: BPlusTreeNode<T>;
+  next: BPlusTreeNode<T> | null = null;
 
-  constructor(private readonly compareFunc: CompareFunc<T>, items: T[] = []) {
-    this.compareFunc = compareFunc
+  constructor(private readonly comparator: Comparator<T>, items: T[] = []) {
     this.items = items;
   }
 
@@ -16,7 +19,7 @@ export class BPlusTreeNode<T> {
 
   split(i: number): [T, BPlusTreeNode<T>] {
     const item = this.items[i];
-    const right = new BPlusTreeNode<T>(this.compareFunc);
+    const right = new BPlusTreeNode<T>(this.comparator);
     right.items = this.items.splice(i + 1);
 
     if (!this.isleaf()) {
@@ -63,7 +66,7 @@ export class BPlusTreeNode<T> {
     // internal node, try split before go to child
     if (this.maybeSplitChild(i, maxItems)) {
       const inTree = this.items[i];
-      if (this.compareFunc(inTree, item) < 0) {
+      if (this.comparator(inTree, item) < 0) {
         // we want second split node
         i++;
       }
@@ -86,7 +89,7 @@ export class BPlusTreeNode<T> {
     return null;
   }
 
-  remove(item: T, minItems: number): T {
+  remove(item: T, minItems: number): T | null {
     const [i, found] = this.findItem(item);
     if (this.isleaf()) {
       if (found) {
@@ -114,7 +117,7 @@ export class BPlusTreeNode<T> {
       // steal from left child
       const child = this.children[i];
       const stealFrom = this.children[i-1];
-      const stolenItem = stealFrom.items.pop();
+      const stolenItem = stealFrom.items.pop()!;
 
       if (child.isleaf()) {
         // push stolenItem to the child's head
@@ -127,19 +130,19 @@ export class BPlusTreeNode<T> {
         // move stolenItem up
         this.items[i-1] = stolenItem;
         // move last child of stealFrom to child's head
-        child.children.splice(0, 0, stealFrom.children.pop());
+        child.children.splice(0, 0, stealFrom.children.pop()!);
       }
     } else if (i < this.items.length && this.children[i+1].items.length > minItems) {
       // steal from right child
       const child = this.children[i];
       const stealFrom = this.children[i+1];
-      const stolenItem = stealFrom.items.shift();
+      const stolenItem = stealFrom.items.shift()!;
 
       if (child.isleaf()) {
         child.items.push(stolenItem);
       } else {
         child.items.push(this.items[i]);
-        child.children .push(stealFrom.children.shift());
+        child.children .push(stealFrom.children.shift()!);
       }
       this.items[i] = stolenItem;
     } else {
@@ -165,7 +168,7 @@ export class BPlusTreeNode<T> {
     let i = 0;
     let compareResult = 1;
     for (; i < this.items.length; i++) {
-      compareResult = this.compareFunc(item, this.items[i]);
+      compareResult = this.comparator(item, this.items[i]);
       if (compareResult < 1) {
         break;
       }
@@ -178,11 +181,11 @@ export class BPlusTreeNode<T> {
 // TODO implements Iterable<T>
 export class BPlusTree<T> {
   length: number = 0;
-  root: BPlusTreeNode<T> = null;
+  root: BPlusTreeNode<T> | null = null;
 
   constructor(
     private readonly degree: number,
-    private readonly compareFunc: CompareFunc<T>
+    private readonly compareFunc: Comparator<T> = DEFAULT_COMPARATOR
   ) {}
 
   maxItems(): number {
