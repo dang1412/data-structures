@@ -429,7 +429,7 @@ func (n *node) remove(item Item, minItems int, typ toRemove) Item {
 	}
 	// If we get to here, we have children.
 	if len(n.children[i].items) <= minItems {
-		n.growChild(i, item, minItems)
+		n.growChild(i, minItems)
 		// redo this step after grow child
 		return n.remove(item, minItems, typ)
 	}
@@ -460,9 +460,9 @@ func (n *node) remove(item Item, minItems int, typ toRemove) Item {
 // We then simply redo our remove call, and the second time (regardless of
 // whether we're in case 1 or 2), we'll have enough items and can guarantee
 // that we hit case A.
-func (n *node) growChild(i int, item Item, minItems int) {
+func (n *node) growChild(i int, minItems int) {
 	if i > 0 && len(n.children[i-1].items) > minItems {
-		// Steal from left child
+		// steal from left child
 		child := n.mutableChild(i)
 		stealFrom := n.mutableChild(i - 1)
 		stolenItem := stealFrom.items.pop()
