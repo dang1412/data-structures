@@ -1,71 +1,109 @@
 package suffixtree
 
-import "fmt"
-
+// edges: map character => node index
+// end = 0 means no end
 type node struct {
-	edges map[rune]*edge
-	link  *node
-	index int
+	edges                   map[byte]int
+	start, end, index, link int
 }
 
-type edge struct {
-	start, end int
-	child      *node
-}
+// type edge struct {
+// 	start, end int
+// 	child      *node
+// }
 
-func (e *edge) len(maxLen int) int {
-	if e.end == 0 {
-		return maxLen - e.start
+func (n *node) len(maxLen int) int {
+	if n.end == 0 {
+		return maxLen - n.start
 	}
-	return e.end - e.start
+	return n.end - n.start
 }
 
-func (e *edge) toStr(text []rune) string {
-	if e.end == 0 {
-		return string(text[e.start:])
+func (n *node) edgeStr(text string) string {
+	if n.end == 0 {
+		return text[n.start:]
 	}
-	return string(text[e.start:e.end])
+	return text[n.start:n.end]
 }
 
 type activePoint struct {
-	n *node
-	e *edge
-	l int
+	node, length int
+	edge         byte
 }
 
-func (p *activePoint) split(t *SuffixTree, splitC, newC rune, i int) *node {
-	leaf := &node{index: t.count}
-	t.count++
-	leafEdge := &edge{i, 0, leaf}
-	if p.e == nil {
-		p.n.edges[newC] = leafEdge
-		return p.n
+// func (ap *activePoint) split(tree *SuffixTree, afterSplitChar, newChar uint8, pos int) *node {
+// 	leaf := &node{index: t.count}
+// 	t.count++
+// 	leafEdge := &edge{i, 0, leaf}
+// 	if p.e == nil {
+// 		p.n.edges[newC] = leafEdge
+// 		return p.n
+// 	}
+
+// 	iEdge := &edge{p.e.start + p.l, p.e.end, p.e.child}
+// 	edges := make(map[rune]*edge)
+// 	edges[splitC] = iEdge
+// 	edges[newC] = leafEdge
+
+// 	iNode := &node{edges, nil, t.count}
+// 	t.count++
+
+// 	// update current edge
+// 	p.e.end = p.e.start + p.l
+// 	p.e.child = iNode
+
+// 	return iNode
+// }
+
+type SuffixTree struct {
+	nodes []node
+	text  string
+}
+
+// New creates
+func New(text string) *SuffixTree {
+	root := node{make(map[byte]int), 0, 0, 0, 0}
+	tree := &SuffixTree{[]node{root}, text}
+	return tree
+}
+
+func (tree *SuffixTree) newNode(edges map[byte]int, start, end int) int {
+	index := len(tree.nodes)
+	node := node{edges, start, end, index, 0}
+	tree.nodes = append(tree.nodes, node)
+	return index
+}
+
+func (tree *SuffixTree) split(ap *activePoint, pos int) int {
+	if ap.length == 0 {
+		tree.newNode(nil, pos, 0)
+		return ap.node
 	}
 
-	iEdge := &edge{p.e.start + p.l, p.e.end, p.e.child}
-	edges := make(map[rune]*edge)
-	edges[splitC] = iEdge
-	edges[newC] = leafEdge
+	// TODO panic if active edge not available (ap.edge == 0)
 
-	iNode := &node{edges, nil, t.count}
-	t.count++
+	// current edge info
+	activeNode := tree.nodes[ap.node]
+	childNode := tree.nodes[activeNode.edges[ap.edge]]
+	edgeStart := childNode.start
+	edgeMidPos := childNode.start + ap.length
 
 	// update current edge
-	p.e.end = p.e.start + p.l
-	p.e.child = iNode
+	childNode.start = edgeMidPos
 
-	return iNode
-}
+	// create new internal node
+	internalEdges = make(map[byte]int)
+	internalEdges[tree.text[edgeMidPos]] = childNode.index
+	internalNodeIndex := tree.newNode(internalEdges, edgeStart, edgeMidPos)
 
-// SuffixTree main
-type SuffixTree struct {
-	root  *node
-	text  []rune
-	count int
+	// create new leaf node
+	internalEdges[tree.text[pos]] = tree.newNode(nil, pos, 0)
+
+	return internalNodeIndex
 }
 
 // guarantee that the move can be done or panic
-func (t *SuffixTree) move(n *node, l, r int) *activePoint {
+func (tree *SuffixTree) move(nodeIndex, left, right int) *activePoint {
 	maxlen := len(t.text)
 	for l < r {
 		count := r - l
@@ -84,112 +122,5 @@ func (t *SuffixTree) move(n *node, l, r int) *activePoint {
 	}
 
 	// stop right at a node
-	return &activePoint{n, nil, 0}
-}
-
-// guarantee that activeLen < activeEdge's length
-func (t *SuffixTree) stepForward(point *activePoint, c rune) bool {
-	maxlen := len(t.text)
-	// active point is at a node
-	if point.e == nil {
-		edge := point.n.edges[c]
-		if edge == nil {
-			return false
-		}
-
-		point.l = 1
-		point.e = edge
-		return true
-	}
-
-	// active point is on middle of an edge
-	if t.text[point.e.start+point.l] == c {
-		// can step forward
-		point.l++
-		if point.l == point.e.len(maxlen) {
-			point.n = point.e.child
-			point.e = nil
-			point.l = 0
-		}
-
-		return true
-	}
-
-	return false
-}
-
-// Print prints tree
-func (t *SuffixTree) Print() {
-	fmt.Println("tree")
-	var f func(*edge, *node, string)
-	f = func(e *edge, n *node, pre string) {
-		substr := ""
-		if e != nil {
-			substr = e.toStr(t.text)
-		}
-		edges := n.edges
-		if len(edges) == 0 {
-			fmt.Println("╴", substr)
-			return
-		}
-		fmt.Println("┐", substr)
-		for _, edge := range edges {
-			fmt.Print(pre, "├─")
-			f(edge, edge.child, pre+"│ ")
-		}
-	}
-	f(nil, t.root, "")
-}
-
-// New create new Suffixtree with text
-func New(text []rune) *SuffixTree {
-	root := &node{
-		edges: make(map[rune]*edge),
-	}
-	t := &SuffixTree{root, text, 1}
-
-	ap := &activePoint{root, nil, 0}
-	remainingSuffix := 0
-
-	var lastInternalNode *node = nil
-
-	for i := range text {
-		// extend(i)
-		remainingSuffix++
-		for remainingSuffix > 0 {
-			if !t.stepForward(ap, text[i]) {
-				var splitC rune
-				if ap.e != nil {
-					splitC = text[ap.e.start+ap.l]
-				}
-				newInternalNode := ap.split(t, splitC, text[i], i)
-				if lastInternalNode != nil {
-					lastInternalNode.link = newInternalNode
-				}
-				if ap.e != nil {
-					lastInternalNode = newInternalNode
-				} else {
-					lastInternalNode = nil
-				}
-
-				remainingSuffix--
-				if ap.n.link != nil {
-					if ap.e != nil {
-						ap = t.move(ap.n.link, ap.e.start, ap.e.start+ap.l)
-					} else {
-						ap.n = ap.n.link
-					}
-
-				} else {
-					ap = t.move(root, i-remainingSuffix+1, i)
-				}
-			} else {
-				lastInternalNode = nil
-				break
-			}
-		}
-
-	}
-
-	return t
+	return &activePoint{nodeIndex, 0, 0}
 }
