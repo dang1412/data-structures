@@ -5,6 +5,6 @@ import (
 )
 
 func TestNewTree(t *testing.T) {
-	suffixTree := New([]rune("abcbcdabcdx"))
+	suffixTree := New("abcbcbabcbd")
 	suffixTree.Print()
 }
