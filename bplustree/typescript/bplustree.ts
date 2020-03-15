@@ -40,7 +40,7 @@ export class BPlusTreeNode<T> {
     }
 
     const left = this.children[i];
-    const [item, right] = left.split(maxItems / 2);
+    const [item, right] = left.split(Math.floor(maxItems / 2));
     this.items.splice(i, 0, item);
     this.children.splice(i + 1, 0, right);
 
@@ -185,7 +185,7 @@ export class BPlusTree<T> {
 
   constructor(
     private readonly degree: number,
-    private readonly compareFunc: Comparator<T> = DEFAULT_COMPARATOR
+    private readonly comparator: Comparator<T> = DEFAULT_COMPARATOR
   ) {}
 
   maxItems(): number {
@@ -197,7 +197,7 @@ export class BPlusTree<T> {
   }
 
   newNode(items: T[] = []): BPlusTreeNode<T> {
-    return new BPlusTreeNode<T>(this.compareFunc, items);
+    return new BPlusTreeNode<T>(this.comparator, items);
   }
 
   replaceOrInsert(item: T): T | null {
@@ -216,7 +216,7 @@ export class BPlusTree<T> {
     const maxItems = this.maxItems();
 
     if (this.root.items.length >= maxItems) {
-      const [item2, second] = this.root.split(maxItems / 2);
+      const [item2, second] = this.root.split(Math.floor(maxItems / 2));
       const oldRoot = this.root;
       this.root = this.newNode([item2]);
       this.root.children = [oldRoot, second];
