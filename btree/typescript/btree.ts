@@ -1,7 +1,7 @@
 export type Comparator<T> = (t1: T, t2: T) => -1 | 0 | 1;
 
 const DEFAULT_COMPARATOR: Comparator<any> = (a, b) => {
-  return a < b ? -1 : a == b ? 0 : 1;
+  return a < b ? -1 : a === b ? 0 : 1;
 }
 
 export class BTreeNode<T> {
@@ -14,7 +14,7 @@ export class BTreeNode<T> {
   }
 
   isleaf(): Boolean {
-    return this.children.length == 0;
+    return this.children.length === 0;
   }
 
   split(i: number): [T, BTreeNode<T>] {
@@ -98,7 +98,7 @@ export class BTreeNode<T> {
     // no item means removeMax
     const [i, found] = item ? this.findItem(item)
       // is leaf, the last item and found
-      : this.isleaf ? [this.items.length - 1, true]
+      : this.isleaf() ? [this.items.length - 1, true]
       // not leaf, not found, go down to last child
       : [this.items.length, false];
     if (this.isleaf()) {
@@ -183,7 +183,7 @@ export class BTreeNode<T> {
       }
     }
 
-    return [i, compareResult == 0];
+    return [i, compareResult === 0];
   }
 }
 
@@ -210,7 +210,7 @@ export class BTree<T> {
   }
 
   replaceOrInsert(item: T): T | null {
-    if (!item) {
+    if (item == null) {
       throw new Error('null item being added to Btree');
     }
 
@@ -240,11 +240,11 @@ export class BTree<T> {
   }
 
   remove(item: T): T | null {
-    if (this.root == null || this.root.items.length == 0) {
+    if (this.root == null || this.root.items.length === 0) {
       return null;
     }
     const out = this.root.remove(item, this.minItems());
-    if (this.root.items.length == 0 && this.root.children.length > 0) {
+    if (this.root.items.length === 0 && this.root.children.length > 0) {
       const oldRoot = this.root;
       // only 1 child in this case
       this.root = oldRoot.children[0];
