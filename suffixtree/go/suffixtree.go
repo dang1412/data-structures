@@ -187,9 +187,7 @@ func (tree *SuffixTree) stepForward(ap *activePoint, c byte) bool {
 			return false
 		}
 
-		ap.length = 1
 		ap.edge = c
-		return true
 	}
 
 	// TODO panic if ap.edge (activeEdge) = 0
