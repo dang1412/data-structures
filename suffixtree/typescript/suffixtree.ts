@@ -98,13 +98,14 @@ export class SuffixTree {
     // update current edge
     childNode.start = edgeMidPos;
 
-    // create new internal node
+    // internal edges
     const internalEdges = {
       [this.text[edgeMidPos]]: childNodeIndex,
-      // create new leaf node
-      [this.text[pos]]: this.newNode({}, pos, 0)
     };
+    // create new internal node
     const internalNodeIndex = this.newNode(internalEdges, edgeStart, edgeMidPos);
+    // create new leaf node
+    internalEdges[this.text[pos]] = this.newNode({}, pos, 0);
 
     // update activeNode's child
     activeNode.edges[this.text[edgeStart]] = internalNodeIndex;
@@ -151,13 +152,11 @@ export class SuffixTree {
     if (ap.length === 0) {
       // follow the edge started by character c
       const childNodeIndex = this.nodes[ap.node].edges[c];
-      if (childNodeIndex === 0) {
+      if (!childNodeIndex) {
         return false;
       }
 
-      ap.length = 1;
       ap.edge = c;
-      return true;
     }
 
     // TODO throw Error if ap.edge (activeEdge) = ''
