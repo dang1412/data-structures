@@ -44,10 +44,12 @@ export class LLRBTree<T> {
         // case key < h.item:
         case -1: {
           h = h.left;
+          break;
         }
         // case key > h.item:
         case 1: {
           h = h.right;
+          break;
         }
         // key = h.item
         default:
@@ -84,7 +86,7 @@ export class LLRBTree<T> {
       h = this.rotateLeft(h);
     }
   
-    if (isRed(h.left) && isRed(h.left.left)) {
+    if (isRed(h.left) && isRed(h.left!.left)) {
       h = this.rotateRight(h);
     }
   
@@ -97,8 +99,8 @@ export class LLRBTree<T> {
 
   // DeleteMin deletes the minimum element in the tree and returns the
   // deleted item or null otherwise.
-  deleteMin(): T {
-    let deleted: T;
+  deleteMin(): T | null {
+    let deleted: T | null;
     [this.root, deleted] = this.deleteMinNode(this.root);
     if (this.root != null) {
       this.root.black = true;
@@ -123,7 +125,7 @@ export class LLRBTree<T> {
       h = this.moveRedLeft(h);
     }
 
-    let deleted: T;
+    let deleted: T | null;
     [h.left, deleted] = this.deleteMinNode(h.left);
 
     return [this.fixUp(h), deleted];
@@ -131,8 +133,8 @@ export class LLRBTree<T> {
 
   // DeleteMax deletes the maximum element in the tree and returns
   // the deleted item or null otherwise
-  deleteMax(): T {
-    let deleted: T;
+  deleteMax(): T | null {
+    let deleted: T | null;
     [this.root, deleted] = this.deleteMaxNode(this.root);
     if (this.root != null) {
       this.root.black = true;
@@ -157,7 +159,7 @@ export class LLRBTree<T> {
     if (!isRed(h.right) && !isRed(h.right.left)) {
       h = this.moveRedRight(h);
     }
-    let deleted: T;
+    let deleted: T | null;
     [h.right, deleted] = this.deleteMaxNode(h.right);
 
     return [this.fixUp(h), deleted];
@@ -165,8 +167,8 @@ export class LLRBTree<T> {
 
   // // Delete deletes an item from the tree whose key equals key.
   // // The deleted item is return, otherwise null is returned.
-  Delete(key: T): T {
-    let deleted: T;
+  Delete(key: T): T | null {
+    let deleted: T | null;
     [this.root, deleted] = this.deleteNode(this.root, key);
     if (this.root != null) {
       this.root.black = true
@@ -178,8 +180,8 @@ export class LLRBTree<T> {
     return deleted;
   }
 
-  private deleteNode(h: LLRBNode<T>, item: T): [LLRBNode<T> | null, T | null] {
-    let deleted: T;
+  private deleteNode(h: LLRBNode<T> | null, item: T): [LLRBNode<T> | null, T | null] {
+    let deleted: T | null;
     if (h == null) {
       return [null, null];
     }
@@ -207,7 +209,7 @@ export class LLRBTree<T> {
       }
       // If @item equals @h.Item, and (from above) 'h.right != null'
       if (compare === 0) {
-        let subDeleted: T;
+        let subDeleted: T | null;
         [h.right, subDeleted] = this.deleteMinNode(h.right);
         if (subDeleted == null) {
           throw new Error('logic');
@@ -223,7 +225,7 @@ export class LLRBTree<T> {
   
   private rotateLeft(h: LLRBNode<T>): LLRBNode<T> {
     const x = h.right;
-    if (x.black) {
+    if (x == null || x.black) {
       throw new Error('rotating a black link');
     }
     h.right = x.left;
@@ -236,7 +238,7 @@ export class LLRBTree<T> {
   
   private rotateRight(h: LLRBNode<T>): LLRBNode<T> {
     const x = h.left;
-    if (x.black) {
+    if (x == null || x.black) {
       throw new Error('rotating a black link');
     }
     h.left = x.right;
@@ -249,6 +251,9 @@ export class LLRBTree<T> {
   
   // REQUIRE: left and right children must be present
   private flip(h: LLRBNode<T>) {
+    if (h.left == null || h.right == null) {
+      return;
+    }
     h.black = !h.black;
     h.left.black = !h.left.black
     h.right.black = !h.right.black
@@ -256,6 +261,9 @@ export class LLRBTree<T> {
   
   // REQUIRE: left and right children must be present
   private moveRedLeft(h: LLRBNode<T>): LLRBNode<T> {
+    if (h.left == null || h.right == null) {
+      return h;
+    }
     this.flip(h);
     if (isRed(h.right.left)) {
       h.right = this.rotateRight(h.right);
@@ -268,6 +276,9 @@ export class LLRBTree<T> {
   
   // REQUIRE: left and right children must be present
   private moveRedRight(h: LLRBNode<T>): LLRBNode<T> {
+    if (h.left == null || h.right == null) {
+      return h;
+    }
     this.flip(h);
     if (isRed(h.left.left)) {
       h = this.rotateRight(h);
@@ -282,7 +293,7 @@ export class LLRBTree<T> {
       h = this.rotateLeft(h);
     }
   
-    if (isRed(h.left) && isRed(h.left.left)) {
+    if (isRed(h.left) && isRed(h.left!.left)) {
       h = this.rotateRight(h);
     }
   
