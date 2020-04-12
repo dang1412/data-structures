@@ -185,8 +185,7 @@ export class LLRBTree<T> {
     if (h == null) {
       return [null, null];
     }
-    const compare = this.comparator(item, h.item);
-    if (compare < 0) {
+    if (this.comparator(item, h.item) < 0) {
       // item < h.item
       if (h.left == null) { // item not present. Nothing to delete
         return [h, null];
@@ -200,7 +199,7 @@ export class LLRBTree<T> {
         h = this.rotateRight(h);
       }
       // If @item equals @h.Item and no right children at @h
-      if (compare === 0 && h.right == null) {
+      if (this.comparator(item, h.item) === 0 && h.right == null) {
         return [null, h.item];
       }
       // PETAR: Added 'h.right != null' below
@@ -208,7 +207,7 @@ export class LLRBTree<T> {
         h = this.moveRedRight(h);
       }
       // If @item equals @h.Item, and (from above) 'h.right != null'
-      if (compare === 0) {
+      if (this.comparator(item, h.item) === 0) {
         let subDeleted: T | null;
         [h.right, subDeleted] = this.deleteMinNode(h.right);
         if (subDeleted == null) {
