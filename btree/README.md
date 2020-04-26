@@ -48,8 +48,8 @@ To delete an element(key), search the tree to find the node where the element sh
 
 ## References
 
-[WIKI](https://en.wikipedia.org/wiki/B-tree){:target="_blank"}
+[WIKI](https://en.wikipedia.org/wiki/B-tree)
 
 ## Demostration
 
-[B-tree](https://en.wikipedia.org/wiki/B-tree){:target="_blank"}
+[B-tree](https://codetube-vn.web.app/btree)
