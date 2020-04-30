@@ -3,6 +3,10 @@
 B-tree is a self-balancing tree data structure that maintains sorted data and allows searches, sequential access, insertions, and deletions in logarithmic time. The B-tree generalizes the binary search tree, allowing for nodes with more than two children (hold more than 1 key).
 B-tree is well suited for storage systems that read and write relatively large blocks of data, such as discs. It is commonly used in databases and file systems.
 
+![btree image](https://codetube-vn.web.app/images/btree.png "Btree")
+
+<!-- separation -->
+
 ## Definitions
 
 Arcording to this implementation, a B-tree of degree d (order m = 2 * d) is a tree which satisfies the following properties:
