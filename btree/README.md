@@ -5,7 +5,15 @@ B-tree is well suited for storage systems that read and write relatively large b
 
 ![btree image](https://codetube-vn.web.app/images/btree.png "Btree")
 
-<!-- separation -->
+<!-- HeadMark -->
+
+- [Definitions](#Definitions)
+- [Implementation](#Implementation)
+  - [Search](#Search)
+  - [Insertion](#Insertion)
+  - [Deletion](#Deletion)
+- [References](#References)
+- [Demostration](#Demostration)
 
 ## Definitions
 
@@ -33,12 +41,12 @@ To insert a new element, search the tree to find the leaf node where the new ele
 - While searching the tree from the root to the node where the insertion will take place, splitting any full nodes encountered on the way preemptively into two nodes:
   - A single median is chosen from among the node's keys and the new key.
   - Keys less than the median are put in the new left node and keys greater than the median are put in the new right node, with the median acting as a separation key.
-  - The separation value is inserted in the node's parent (which guarantee that is not full node). If the node has no parent (i.e., the node was the root), create a new root above this node (increasing the height of the tree).
+  - The separation value is inserted in the node's parent (which guaranteed that is not full node). If the node has no parent (i.e., the node was the root), create a new root above this node (increasing the height of the tree).
 - Reach the non-full leaf node, simply insert the new key in the right position.
 
 ### Deletion
 
-To delete an element(key), search the tree to find the node where the element should be deleted, following below strategies:
+To delete an element/key, search the tree to find the node where the element should be deleted, following below strategies:
 
 - While searching the tree from the root to the node where the deletion will occur, before entering a node we will perform restructure if the node has min (d-1) elements to make sure every node we go through will have more than min elements (so we can easily remove one in the next step):
   - If the left sibling has more than min elements then move one element from left sibling to current node (rotate right).
@@ -55,5 +63,7 @@ To delete an element(key), search the tree to find the node where the element sh
 [WIKI](https://en.wikipedia.org/wiki/B-tree)
 
 ## Demostration
+
+<!-- EndMark -->
 
 [B-tree](https://codetube-vn.web.app/btree)

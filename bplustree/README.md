@@ -4,7 +4,15 @@ B+tree is a variant of btree, which is also widely used for storing data in a bl
 
 ![b+tree image](https://codetube-vn.web.app/images/bplustree.png "B+tree")
 
-<!-- separation -->
+<!-- HeadMark -->
+
+- [Definitions](#Definitions)
+- [Implementation](#Implementation)
+  - [Search](#Search)
+  - [Insertion](#Insertion)
+  - [Deletion](#Deletion)
+- [References](#References)
+- [Demostration](#Demostration)
 
 ## Definition
 
@@ -58,5 +66,7 @@ To delete an element/key, search the tree to find the **leaf node** where the el
 [WIKI B+tree](https://en.wikipedia.org/wiki/B%2B_tree)
 
 ## Demostration
+
+<!-- EndMark -->
 
 [B+tree](https://codetube-vn.web.app/bplustree)
