@@ -2,17 +2,17 @@
 
 B+tree is a variant of btree, which is also widely used for storing data in a block-oriented (I/O operations are expensive and will process a block of many records of data at once instead of a single record) storage context, such as database storage or filesystems like XFS, BFS or NTFS. B+tree node often has high number of elements/children (order of 100 or more), which reduces the number of I/O operations required to find an element in the tree.
 
-![b+tree image](https://codetube-vn.web.app/images/bplustree.png "B+tree")
+![b+tree image](https://codetube.vn/images/bplustree.png "B+tree")
 
 <!-- HeadMark -->
 
-- [Definitions](#Definitions)
-- [Implementation](#Implementation)
-  - [Search](#Search)
-  - [Insertion](#Insertion)
-  - [Deletion](#Deletion)
-- [References](#References)
-- [Demostration](#Demostration)
+- [Definitions](#definitions)
+- [Implementation](#implementation)
+  - [Search](#search)
+  - [Insertion](#insertion)
+  - [Deletion](#deletion)
+- [References](#references)
+- [Demostration](#demostration)
 
 ## Definition
 
@@ -69,4 +69,4 @@ To delete an element/key, search the tree to find the **leaf node** where the el
 
 <!-- EndMark -->
 
-[B+tree](https://codetube-vn.web.app/bplustree)
+[B+tree](https://codetube.vn/bplustree)

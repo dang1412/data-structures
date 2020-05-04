@@ -2,14 +2,14 @@
 
 A suffix tree (also called PAT tree or, in an earlier form, position tree) is a compressed trie containing all the suffixes of the given text as their keys and positions in the text as their values. Suffix trees allow particularly fast implementations of many important string operations: quickly locating a substring in S, locating a substring if a certain number of mistakes are allowed, locating matches for a regular expression pattern etc. Suffix trees also provide one of the first linear-time solutions for the longest common substring problem. Ukkonen based algorithm allows to construct suffix tree of the string S in linear (to the length of S) time and space.
 
-![suffixtree image](https://codetube-vn.web.app/images/suffixtree.png "Suffix Tree")
+![suffixtree image](https://codetube.vn/images/suffixtree.png "Suffix Tree")
 
 <!-- HeadMark -->
 
-- [Definitions](#Definitions)
-- [Implementation](#Implementation)
-- [References](#References)
-- [Demostration](#Demostration)
+- [Definitions](#definitions)
+- [Implementation](#implementation)
+- [References](#references)
+- [Demostration](#demostration)
 
 ## Definition
 
@@ -38,4 +38,4 @@ The algorithm begins with an implicit suffix tree containing the first character
 
 <!-- EndMark -->
 
-[Suffix Tree](https://codetube-vn.web.app/suffixtree)
+[Suffix Tree](https://codetube.vn/suffixtree)
