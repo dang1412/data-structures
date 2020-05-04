@@ -24,4 +24,4 @@ The code and guides are referenced from many sources on the internet and will be
 
 ## License
 
-UNKONWN
+MIT
