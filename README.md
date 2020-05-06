@@ -1,8 +1,8 @@
-# Data Structures
+# Interesting Algorithms & Data Structures
 
-This Project provides basic implementation for popular algorithms and data structures in some major programming languages, explanation and visual demonstration that strictly follow the implementation, aims at making complex things understandable to everyone, ease of learning from source code, test code, guides and visual demo.
+This project provides basic implementation for interesting and popular algorithms and data structures in some major programming languages (Go, Typescript,...), explanation and visual demonstration that closely follow the implementation. It aims at making complex things understandable to everyone, ease of learning from source code, test code, explanation and visual demo.
 
-Check website [Codetube.vn](https://codetube.vn) for details. All guide contents in this [github repo](https://github.com/dang1412/data-structures) will be reflected on the website.
+Check out website [Codetube.vn](https://codetube.vn) for details. All guide contents in this [github repo](https://github.com/dang1412/data-structures) will be reflected on the website.
 
 The code may not ready for production (please help it does) but definitely useful to use. Current supported algorithms and data structures are:
 
@@ -14,9 +14,9 @@ The code may not ready for production (please help it does) but definitely usefu
 
 ## Contribution
 
-Implementations in all programming languages should follow the generic implementation guides, or it will need specific explanation for people to understand.
+Implementations in all programming languages should follow the generic implementation guides (basically the Go-version), or it will need extra specific explanation for people to understand.
 
-Contents are designed to be easy for everyone to contribute in various languages includes English, Chinese, Japanese, Vietnamese and so on. Please keep the language-version in right format to be displayed on [website](https://codetube.vn) properly, and be up to date with the English version as much as possible. All considerable contributors will be listed.
+Contents are designed to be easy for everyone to contribute in various languages includes English, Chinese, Japanese, Vietnamese and so on. Please keep the language-version in right format to be displayed on [Website](https://codetube.vn) properly, and be up to date with the English version as much as possible. All considerable contributors will be listed.
 
 ## References
 
