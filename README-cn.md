@@ -23,7 +23,7 @@ The code may not ready for production (please help it does) but definitely usefu
 
 ## 参考文献
 
-这些代码和指南是从互联网上的许多来源中引用的，并将他们全部列出。去请查看特定算法的目录位置以获取更多的信息。
+这些代码和指南是从互联网上的许多来源中引用的，并将他们全部列出。请查看特定算法的目录位置以获取更多的信息。
 
 ## License
 
