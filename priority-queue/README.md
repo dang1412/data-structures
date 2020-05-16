@@ -4,9 +4,9 @@ A priority queue is an abstract data type which is like a regular queue or stack
 
 ![priorityqueue](https://codetube.vn/images/priorityqueue.png "Priority Queue")
 
-## Operations
+<!-- HeadMark -->
 
-In some implementations, if two elements have the same priority, they are served according to the order in which they were enqueued, while in other implementations, ordering of elements with the same priority is undefined.
+## Operations
 
 - isEmpty: check whether the queue has no elements.
 - push: add an element to the queue with an associated priority.
@@ -15,7 +15,7 @@ In some implementations, if two elements have the same priority, they are served
 
 ## Implementation
 
-Using heap, to represent the tree (binary heap) we use an array `a` which has the following properties:
+In some implementations, if two elements have the same priority, they are served according to the order in which they were enqueued, while in other implementations, ordering of elements with the same priority is undefined. Using heap, to represent the tree (binary heap) we use an array `a` which has the following properties:
 
 - `a[0]` is the root
 - left child of `a[i]` is `a[2*i+1]`
@@ -23,15 +23,15 @@ Using heap, to represent the tree (binary heap) we use an array `a` which has th
 - parent of `a[i]` is `a[(i - 1)/2]`
 
 Base on that assumption, we implement the following methods:
-- _heapify(i): for the subtree that take i-th element as root, the heap is satisfied conditions except for the root. We put down the root (i-th element, swap with left or right child) until it's key is less than or equal to all of its children's keys, or reach leaf.
-- push(`element`)
+- `_heapify(i)`: for the subtree that take i-th element as root, the heap is satisfied conditions except for the root. We put down the root (i-th element, swap with left or right child) until it's key is less than or equal to all of its children's keys, or reach leaf.
+- `push(element)`:
   - push the new element to the last position.
   - put the element up (swap with its parent) until it's key is greater than or equal to it's parent's key, or reach root.
-- pop()
+- `pop()`:
   - take out the root element `a[0]`, ready to be returned later.
   - override the root with the last element, decrease heap size by 1: `a[0] = a[size - 1]`.
   - invoke `_heapify(0)`.
-- top(): simply return the `a[0]` element.
+- `top()`: simply return the `a[0]` element.
 
 ## References
 
