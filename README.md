@@ -1,5 +1,7 @@
 # Interesting Algorithms & Data Structures
 
+[English](README.md) | [中文](README-cn.md) 
+
 This project provides basic implementation for interesting and popular algorithms and data structures in some major programming languages (Go, Typescript,...), explanation and visual demonstration that closely follow the implementation. It aims at making complex things understandable to everyone, ease of learning from source code, test code, explanation and visual demo.
 
 Check out website [Codetube.vn](https://codetube.vn) for details. All guide contents in this [github repo](https://github.com/dang1412/data-structures) will be reflected on the website.
