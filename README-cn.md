@@ -1,11 +1,10 @@
 # 有趣的算法和数据结构
 
+[English](README.md) | [中文](README-cn.md) 
+
 本项目提供了一些主要编程语言（Go，Typescript等）中有趣且流行的算法和数据结构的基本实现，以及实现的解释说明和可视化演示。目标是让所有人都能够理解复杂的东西，易于在源代码、测试代码、注释和可视化演示中学习理解。
 
 请访问网站[Codetube.vn](https://codetube.vn) 以了解详细信息。此 [资源库](https://github.com/dang1412/data-structures) 的所有指南内容都将反映在网站上。
-
-The code may not ready for production (please help it does) but definitely useful to use. Current supported algorithms and data structures are:
-上。
 
 此代码可能尚未准备好投入生产（请帮忙贡献代码，完善它），但是它非常实用。当前支持的算法和数据结构是：
 
