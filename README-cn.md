@@ -6,9 +6,6 @@
 
 请访问网站[Codetube.vn](https://codetube.vn) 以了解详细信息。此 [资源库](https://github.com/dang1412/data-structures) 的所有指南内容都将反映在网站上。
 
-The code may not ready for production (please help it does) but definitely useful to use. Current supported algorithms and data structures are:
-上。
-
 此代码可能尚未准备好投入生产（请帮忙贡献代码，完善它），但是它非常实用。当前支持的算法和数据结构是：
 
 - [Btree](https://codetube.vn/btree)
