@@ -53,3 +53,10 @@ func TestSelectionSort(t *testing.T) {
 		t.Fatalf("Got %v\nWant %v\n", arr, sorted)
 	}
 }
+
+func TestMergeSort(t *testing.T) {
+	arr := clone(origin)
+	if MergeSort(arr); !reflect.DeepEqual(arr, sorted) {
+		t.Fatalf("Got %v\nWant %v\n", arr, sorted)
+	}
+}
