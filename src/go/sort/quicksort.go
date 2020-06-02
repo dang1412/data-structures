@@ -2,14 +2,14 @@ package sort
 
 // QuickSort sorts array of items arr
 func QuickSort(arr []Item) {
-	sort(arr, 0, len(arr)-1)
+	qsort(arr, 0, len(arr)-1)
 }
 
-func sort(arr []Item, low, high int) {
+func qsort(arr []Item, low, high int) {
 	if low < high {
 		pi := partition(arr, low, high)
-		sort(arr, low, pi-1)
-		sort(arr, pi+1, high)
+		qsort(arr, low, pi-1)
+		qsort(arr, pi+1, high)
 	}
 }
 

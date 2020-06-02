@@ -2,14 +2,14 @@ import { swap } from './common'
 
 // QuickSort sorts array of items
 export function quickSort(arr: number[]) {
-	sort(arr, 0, arr.length - 1)
+	qsort(arr, 0, arr.length - 1)
 }
 
-function sort(arr: number[], low: number, high: number) {
+function qsort(arr: number[], low: number, high: number) {
 	if (low < high) {
 		const pi = partition(arr, low, high)
-		sort(arr, low, pi-1)
-		sort(arr, pi+1, high)
+		qsort(arr, low, pi-1)
+		qsort(arr, pi+1, high)
 	}
 }
 
