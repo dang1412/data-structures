@@ -2,14 +2,14 @@
 export function kLargestElement(a: number[], k: number): number {
 	let left = 0
 	let right = a.length - 1
-	// k largest element === l smallest element
-	const l = a.length - k
+	// k largest element mean we find pivot = k -1
+	k--
 	while (left < right) {
 		const pivot = partition(a, left, right)
-		// found l smallest element
-		if (pivot == l) {
-			return a[l]
-		} else if (pivot < l) {
+		// found (pivot + 1)th largest element
+		if (pivot == k) {
+			return a[k]
+		} else if (pivot < k) {
 			// continue with right part
 			left = pivot + 1
 		} else {
@@ -23,14 +23,14 @@ export function kLargestElement(a: number[], k: number): number {
 
 function partition(a: number[], left: number, right: number): number {
 	let i = left
-	while (a[i] < a[right]) {
+	while (a[i] > a[right]) {
 		i++
 	}
 
 	// choose a[right] as the pivot
 	for (let j = i + 1; j < right; j++) {
-		if (a[j] < a[right]) {
-			// move the less number to head
+		if (a[j] > a[right]) {
+			// move the larger number to head
 			swap(a, i, j)
 			i++
 		}
@@ -41,8 +41,8 @@ function partition(a: number[], left: number, right: number): number {
 	}
 
 	// a[i] is pivot,
-	// all the elements before i (if any) less than pivot,
-	// all the elements after i (if any) large or equal pivot
+	// all the elements before i (if any) larger than pivot,
+	// all the elements after i (if any) less or equal pivot
 	return i
 }
 

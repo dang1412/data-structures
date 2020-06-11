@@ -4,14 +4,14 @@ package algorithms
 func KLargestElement(a []int, k int) int {
 	left := 0
 	right := len(a) - 1
-	// k largest element === l smallest element
-	l := len(a) - k
+	// k largest element mean we find pivot = k -1
+	k--
 	for left < right {
 		pivot := partition(a, left, right)
-		// found l smallest element
-		if pivot == l {
-			return a[l]
-		} else if pivot < l {
+		// found (pivot + 1)th largest element
+		if pivot == k {
+			return a[k]
+		} else if pivot < k {
 			// continue with right part
 			left = pivot + 1
 		} else {
@@ -29,14 +29,14 @@ func KLargestElement(a []int, k int) int {
 
 func partition(a []int, left, right int) int {
 	i := left
-	for a[i] < a[right] {
+	for a[i] > a[right] {
 		i++
 	}
 
 	// choose a[right] as the pivot
 	for j := i + 1; j < right; j++ {
-		if a[j] < a[right] {
-			// move the less number to head
+		if a[j] > a[right] {
+			// move the larger number to head
 			swap(a, i, j)
 			i++
 		}
@@ -47,8 +47,8 @@ func partition(a []int, left, right int) int {
 	}
 
 	// a[i] is pivot,
-	// all the elements before i (if any) less than pivot,
-	// all the elements after i (if any) large or equal pivot
+	// all the elements before i (if any) larger than pivot,
+	// all the elements after i (if any) less or equal pivot
 	return i
 }
 
