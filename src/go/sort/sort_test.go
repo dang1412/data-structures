@@ -60,3 +60,10 @@ func TestMergeSort(t *testing.T) {
 		t.Fatalf("Got %v\nWant %v\n", arr, sorted)
 	}
 }
+
+func TestHeapSort(t *testing.T) {
+	arr := clone(origin)
+	if HeapSort(arr); !reflect.DeepEqual(arr, sorted) {
+		t.Fatalf("Got %v\nWant %v\n", arr, sorted)
+	}
+}
