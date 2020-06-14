@@ -4,7 +4,7 @@ package sort
 func HeapSort(a []Item) {
 	n := len(a)
 	// max heapify
-	for i := n / 2; i >= 0; i-- {
+	for i := n/2 - 1; i >= 0; i-- {
 		heapify(a, i, n)
 	}
 
