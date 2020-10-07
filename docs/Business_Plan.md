@@ -22,7 +22,7 @@
 
 **Giải pháp**: Chúng tôi xuất thân là sinh viên IT và sau này trở thành lập trình viên, hiểu rất rõ vấn đề này và dựa trên nhiều năm kinh nghiệm của mình đã nghĩ ra giải pháp hiệu quả hơn để học thuật toán đó là lập trình mô phỏng hoạt động của thuật toán bao gồm từng trạng thái và cách chuyển trạng thái thuật toán 1 cách trực quan và tổng quát cho tất cả các trường hợp dựa trên input của người dùng, người dùng tương tác để chuyển đến bất kỳ trạng thái nào mong muốn từ đó dễ dàng kiểm chứng, hiểu rõ hơn và nắm bắt từng khía cạnh của thuật toán, các case thông thường, case đặc biệt...thay vì phải đọc các lý giải bằng chữ rất dài và khó hình dung. Ngoài ra để tăng khả năng mở rộng và chuyên biệt hoá từng công đoạn chúng tôi đóng gói các mô phỏng trực quan này và cho phép người dùng (người dạy học) sử dụng chúng trong bài viết 1 cách dễ dàng thông qua việc sử dụng cú pháp Markdown mà không cần code.
 
-Ví dụ, người dùng có thể đưa vào bài viết mô phỏng cây nhị phân theo cú pháp sau:
+Ví dụ, người dùng có thể đưa vào bài viết mô phỏng cây nhị phân theo cú pháp sau (không có `\`):
 ```
 \```[tree](itemShape=circle,itemSize=30,height=200)
 1:(4)
@@ -32,6 +32,7 @@ Ví dụ, người dùng có thể đưa vào bài viết mô phỏng cây nhị
 1:(4)
 2:(2)|7:(7)
 4:(1)|5:(0)|3:(5)|6:(0)
+\```
 ```
 
 Cho ra kết quả hiển thị 2 trạng thái của cây nhị phân, với animation chuyển trạng thái:
