@@ -287,18 +287,16 @@ Sản phẩm của chúng tôi có khả năng mở rộng linh hoạt có thể
 
 ### **Đặc trưng nổi bật**
 
-[Slideshow: high tech => simple to use (just write) => serve multiple purposes]
-
 Những đặc điểm làm nên đăc trưng khó để bắt chước cũng như lợi thế cạnh tranh của sản phẩm
 
 - Tính kỹ thuật
   - Tính năng Prerender giúp trang chủ load nhanh ngay cả trong môi trường internet tốc độ thấp (view hiển thị trước khi các script nặng được load).
   - Tính năng Lazy load: các thành phần UI đặc biệt có thể nặng đến rất nặng về dung lượng nhưng chỉ được load khi người dùng sử dụng. Do vậy chúng tôi có thể thêm vào tập các thành phần cung cấp mà không sợ ảnh hưởng trải nghiêm của người dùng nếu không dùng đến.
-  - Các thành phần đặc biệt được thiết kế với khả năng tuỳ chỉnh cao phát huy khả năng sáng tạo của người dùng.
-  - Biểu diễn thuật toán trực quan sử dụng [D3.js]()
-  - Slideshow với [Reveal.js]()
-  - Lập trình [Blockly]() mô phỏng kết quả thực thi bằng cách kết hợp gọi API game viết bằng [Pixi.js]()
-  - Code Editor sử dụng [CodeMirror]() nhúng trong bài với tính năng thực thi và debug trực quan với nhiều ngôn ngữ lập trình khác nhau.
+  - Các thành phần đặc biệt sử dụng bằng cú pháp markdown, được thiết kế với khả năng tuỳ chỉnh cao phát huy khả năng sáng tạo của người dùng.
+  - Biểu diễn thuật toán trực quan sử dụng [D3.js](https://d3js.org/)
+  - Slideshow với [Reveal.js](https://revealjs.com/)
+  - Lập trình [Blockly](https://developers.google.com/blockly) mô phỏng kết quả thực thi bằng cách kết hợp gọi API game viết bằng [Pixi.js](https://www.pixijs.com/)
+  - Code Editor sử dụng [CodeMirror](https://codemirror.net/) nhúng trong bài với tính năng thực thi và debug trực quan với nhiều ngôn ngữ lập trình khác nhau.
 - Tính đơn giản, linh hoạt trong cách dùng
   - Chúng tôi giải quyết các vấn đề khó bằng lập trình, người dùng sử dụng chỉ bằng cách viết theo cú pháp
   - Người dùng viết nội dung theo ý mình, đồng thời sử dụng kết hợp các thành phần đặc biệt được tạo sẵn (hoặc tạo theo yêu cầu) theo cách sáng tạo bất kỳ.
@@ -317,16 +315,38 @@ Tuy nhiên để khởi đầu chúng tôi chỉ tập trung vào 1 phân khúc 
 
 ## Trạng thái hiện tại và kế hoạch
 
-Chúng tôi hợp tác với 1 số trường đại học giúp cho giảng viên tạo được tài liệu học sinh động tập trung vào lĩnh vực IT và lập trình cho sinh viên với các tính năng:
+Sản phẩm của chúng tôi mới chỉ ở dạng prototype [demo](https://codetube.vn/editor) các thành phần mà người dùng có thể đưa vào bài viết, và đa phần các ý tưởng được nêu ở trên chưa được thực thi và chưa có dữ liệu khách hàng. Hướng đi của chúng tôi là tìm kiếm các tổ chức giáo dục nhỏ, bắt đầu bằng việc điều tra thấu hiểu nhu cầu giảng dạy từ đó thiết kế trang demo bằng sản phẩm hiện có sao cho phù hợp nhất với nhu cầu khách hàng và đề xuất những hướng đi giúp họ cải thiện hiệu suất, qui trình dạy và học.
 
-- Mô phỏng trực quan hoạt động của cấu trúc dữ liệu và giải thuật.
-- Làm coding test trên web.
-- Lập trình robot với blockly, giả lập mô phỏng kết quả thực thi robot.
+Hiện tại chúng tôi đang làm việc với 1 nhà đầu tư bên Úc nghiên cứu về việc sử dụng lập trình khối kéo thả Blockly để đưa vào giảng dạy lập trình robot cho trẻ em. Kế hoạch của chúng tôi trong tháng 10 và 11 này là tập trung thiết kế các thành phần lập trình khối Blockly và tạo trang demo cho khách hàng chuyên về Blockly.
+
+- Thiết kế toolbox với các khối lập trình block có thể custom được.
+- Block kết hợp với gọi API để thực thi điều khiển nhân vật trong game.
+- Tạo ra 1 vài game bằng [pixi.js](https://www.pixijs.com/), cho phép người dùng lựa chọn để kết hợp với block.
+- Block kết hợp với gọi API để thực thi robot thực tế [Dash & Dot](https://www.makewonder.com/robots/dash/)
+
+Ngoài ra chúng tôi có thể nghiên cứu theo hướng giúp trường học quản lý việc dạy và học lập trình với bài giảng, coding test online do giáo viên tự soạn, tuỳ vào việc tìm hiểu nhu cầu thị trường sẽ có hướng phát triển cụ thể. Cùng với đó tiếp tục phát triển những nội dung đầu tiên cho trang web (không ưu tiên bằng task cho khách hàng):
+
+- Viết bài hướng dẫn sử dụng các thành phần UI đặc biệt.
+- Viết bài giảng về thuật toán có mô phỏng trực quan.
+- Phát triển mô phỏng các thuật toán mới.
 
 ## Team và văn hóa
-  
-Sử dụng tài nguyên chặt chẽ hiệu quả tránh lãng phí
 
-Sản phẩm demo chỉ gói gọn trong 1 web page đủ để cho người dùng hình dung ra giá trị mang lại.
+- Đặng Thanh Tùng
+  - Kỹ sư frontend
+  - Đưa ra ý tưởng và code chính prototype dự án cho đến thời điểm hiện tại.
 
-## Marketing Plan
+- Lê Văn Nghĩa
+  - Nhà phát triển phần mềm mã nguồn mở, là tác giả chính của nhiều dự án mã nguồn mở được nhiều người biết tới.
+  - Phụ trách thiết kế các service backend có thể chịu tải người dùng qui mô lớn ở các giai đoạn sau của dự án.
+
+- David Nguyễn
+  - Tiến sỹ về AI và Robotic tại Úc
+  - Phụ trách nghiên cứu thị trường và sale, hiện anh đang làm việc trực tiếp với 1 số đơn vị tại Úc để triển khai dự án dạy lập trình robot cho trẻ em.
+
+Ngoài ra chúng tôi cũng đang liên hệ để hợp tác cùng 1 số kỹ sư phần mềm giỏi và có hiểu biết sâu, đam mê trong các lĩnh vực AI, Robotic, IOT. Chúng tôi vốn xuất thân là những lập trình viên dày dạn kinh nghiệm nên có phong cách làm việc đã được định hình khá rõ ngay từ ban đầu:
+
+- Phần mềm được thiết kế chặt chẽ có cấu trúc rõ ràng, chia thành các module nhỏ rõ ràng về ý nghĩa, tính sử dụng lại, dễ test, maintain và khả năng mở rộng cao. Cùng với đó là mindset luôn muốn cải thiện hiệu năng, sử dụng tiết kiệm tài nguyên tính toán nhiều nhất có thể.
+- Chúng tôi mong muốn mình tiếp tục phát huy phong cách này khi thực thi dự án: tổ chức chặt chẽ, tính toán kỹ càng trước khi hành động, hướng phát triển tập trung đạt hiệu quả cao chứ không lan man, hời hợt và màu mè gây thất thoát lãng phí.
+
+Chúng tôi hy vọng có cơ hội được đồng hành với các nhà đầu tư, các mentor nhiều năm kinh nghiệm sau chương trình để dự án có thể phát huy tối đa tiềm năng và sớm đưa được sản phẩm trí tuệ Việt Nam ra thị trường quốc tế.
