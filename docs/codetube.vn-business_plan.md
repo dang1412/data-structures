@@ -4,7 +4,7 @@
 
 ### **Nền tảng chia sẻ kiến thức thương mại hóa**
 
-Chúng tôi cung cấp nền tảng chia sẻ kiến thức IT cho cộng đồng, trong đó nổi bật là tính năng hỗ trợ người dùng tạo nội dung với các thành phần tương tác trực quan sinh động có sẵn. Với khả năng mở rộng linh hoạt ngoài thành phần chủ đạo ban đầu là mô phỏng thuật toán, người dùng còn được hỗ trợ để có thể tạo ra tài liệu đa dạng và sinh động bao gồm các thành phần UI phức tạp như vẽ đồ thị, tabs, slideshow, code editor... trong bài chỉ bằng cách viết Markdown. Nội dung được chia sẻ dưới hình thức bài viết, bài học hoặc khoá học có thể thương mại hoá nhằm tạo động lực tối đa cho tác giả sáng tạo ra những nội dung chất lượng phục vụ cộng đồng. Giáo viên có thể tạo bài giảng, bài test câu hỏi trắc nghiệm, coding test. Học sinh trả lời, code, debug và nộp bài...tất cả ngay trong phạm vi 1 bài viết rất nhanh chóng và thuận tiện.
+Chúng tôi cung cấp nền tảng chia sẻ kiến thức IT cho cộng đồng, trong đó nổi bật là tính năng hỗ trợ người dùng tạo nội dung với các thành phần tương tác trực quan sinh động có sẵn. Với khả năng mở rộng linh hoạt ngoài thành phần chủ đạo ban đầu là mô phỏng thuật toán, người dùng còn được hỗ trợ để có thể tạo ra tài liệu đa dạng và sinh động bao gồm các thành phần UI phức tạp như vẽ đồ thị, tabs, slideshow, code editor... trong bài chỉ bằng cách viết Markdown. Nội dung được chia sẻ dưới hình thức bài viết, bài học hoặc khoá học có thể thương mại hoá nhằm tạo động lực tối đa cho tác giả sáng tạo ra những nội dung chất lượng phục vụ cộng đồng. Giáo viên có thể tạo bài giảng, bài test câu hỏi trắc nghiệm, coding test. Học sinh trả lời, code, debug và nộp bài...tất cả ngay trong phạm vi 1 bài viết rất nhanh chóng và thuận tiện. *Có thể nói nền tảng của chúng tôi cho phép người dùng tạo ra nội dung đẹp và đầy đủ chức năng như 1 trang web mà không cần code, nhằm mục đích phục vụ dạy và học*.
 
 Đây là ví dụ về trình soạn thảo markdown của chúng tôi, các bạn truy cập trang web [Codetube.vn - Business Plan](https://codetube.vn/business) để thấy tài liệu này được hiển thị trên web với các thành phần UI đặc biệt.
 
@@ -393,3 +393,9 @@ Ngoài ra chúng tôi cũng đang liên hệ để hợp tác cùng 1 số kỹ 
 - Chúng tôi mong muốn mình tiếp tục phát huy phong cách này khi thực hiện dự án: tổ chức chặt chẽ, tính toán kỹ càng trước khi hành động, hướng phát triển tập trung đạt hiệu quả cao chứ không lan man, hời hợt và màu mè gây thất thoát lãng phí.
 
 Chúng tôi hy vọng có cơ hội được đồng hành với các nhà đầu tư, các mentor nhiều năm kinh nghiệm sau chương trình để dự án có thể phát huy tối đa tiềm năng và sớm đưa được sản phẩm trí tuệ Việt Nam ra thị trường quốc tế.
+
+---
+
+[**Codetube.vn**](https://codetube.vn/)
+
+*Dang Thanh Tung - 2020/10/10*
