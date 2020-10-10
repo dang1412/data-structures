@@ -313,7 +313,13 @@ Những đặc điểm làm nên đăc trưng khó để bắt chước cũng nh
 
 Tuy nhiên để khởi đầu chúng tôi chỉ tập trung vào 1 phân khúc cụ thể với qui mô nhỏ để hiểu hơn về thị trường cũng như định hướng rõ ràng cho sản phẩm của mình trước khi mở rộng.
 
-## Trạng thái hiện tại và kế hoạch
+### **Hạn chế**
+
+Các thành phần mô phỏng thuật toán, UI trực quan mà chúng tôi xây dựng khá riêng rẽ và hạn chế về số lượng nên khó đáp ứng những nhu cầu sáng tạo cao hơn của người dùng. Chúng tôi cần nghiên cứu giải pháp tổng quát hơn như cho phép tạo hình, kéo thả và thiết lập các animation chuyển động để người dùng tự do sáng tạo các thành phần đặc biệt của riêng mình. Tuy nhiên giải pháp này không đơn giản, đòi hỏi kỹ thuật cao và nhiều thời gian công sức nghiên cứu, phát triển.
+
+---
+
+## **Trạng thái hiện tại và kế hoạch**
 
 Sản phẩm của chúng tôi mới chỉ ở dạng prototype [demo](https://codetube.vn/editor) các thành phần mà người dùng có thể đưa vào bài viết, và đa phần các ý tưởng được nêu ở trên chưa được thực thi và chưa có dữ liệu khách hàng. Hướng đi của chúng tôi là tìm kiếm các tổ chức giáo dục nhỏ, bắt đầu bằng việc điều tra thấu hiểu nhu cầu giảng dạy từ đó thiết kế trang demo bằng sản phẩm hiện có sao cho phù hợp nhất với nhu cầu khách hàng và đề xuất những hướng đi giúp họ cải thiện hiệu suất, qui trình dạy và học.
 
@@ -330,10 +336,12 @@ Ngoài ra chúng tôi có thể nghiên cứu theo hướng giúp trường họ
 - Viết bài giảng về thuật toán có mô phỏng trực quan.
 - Phát triển mô phỏng các thuật toán mới.
 
-## Team và văn hóa
+---
+
+## **Team và văn hóa**
 
 - Đặng Thanh Tùng
-  - Kỹ sư frontend
+  - Kỹ sư frontend.
   - Đưa ra ý tưởng và code chính prototype dự án cho đến thời điểm hiện tại.
 
 - Lê Văn Nghĩa
@@ -341,12 +349,12 @@ Ngoài ra chúng tôi có thể nghiên cứu theo hướng giúp trường họ
   - Phụ trách thiết kế các service backend có thể chịu tải người dùng qui mô lớn ở các giai đoạn sau của dự án.
 
 - David Nguyễn
-  - Tiến sỹ về AI và Robotic tại Úc
+  - Tiến sỹ về AI và Robotic tại Úc.
   - Phụ trách nghiên cứu thị trường và sale, hiện anh đang làm việc trực tiếp với 1 số đơn vị tại Úc để triển khai dự án dạy lập trình robot cho trẻ em.
 
-Ngoài ra chúng tôi cũng đang liên hệ để hợp tác cùng 1 số kỹ sư phần mềm giỏi và có hiểu biết sâu, đam mê trong các lĩnh vực AI, Robotic, IOT. Chúng tôi vốn xuất thân là những lập trình viên dày dạn kinh nghiệm nên có phong cách làm việc đã được định hình khá rõ ngay từ ban đầu:
+Ngoài ra chúng tôi cũng đang liên hệ để hợp tác cùng 1 số kỹ sư phần mềm giỏi và có hiểu biết sâu, đam mê trong các lĩnh vực AI, Robotic, IOT. Chúng tôi vốn xuất thân là những lập trình viên dày dạn kinh nghiệm và có năng lực nên phong cách làm việc đã được định hình khá rõ ngay từ ban đầu:
 
-- Phần mềm được thiết kế chặt chẽ có cấu trúc rõ ràng, chia thành các module nhỏ rõ ràng về ý nghĩa, tính sử dụng lại, dễ test, maintain và khả năng mở rộng cao. Cùng với đó là mindset luôn muốn cải thiện hiệu năng, sử dụng tiết kiệm tài nguyên tính toán nhiều nhất có thể.
-- Chúng tôi mong muốn mình tiếp tục phát huy phong cách này khi thực thi dự án: tổ chức chặt chẽ, tính toán kỹ càng trước khi hành động, hướng phát triển tập trung đạt hiệu quả cao chứ không lan man, hời hợt và màu mè gây thất thoát lãng phí.
+- Phần mềm được thiết kế chặt chẽ có cấu trúc rõ ràng, chia thành các module nhỏ rõ ràng về ý nghĩa, tính sử dụng lại, dễ test, maintain và khả năng mở rộng cao. Cùng với đó là mindset luôn muốn cải thiện hiệu năng, sử dụng tài nguyên tính toán tối ưu nhất có thể.
+- Chúng tôi mong muốn mình tiếp tục phát huy phong cách này khi thực hiện dự án: tổ chức chặt chẽ, tính toán kỹ càng trước khi hành động, hướng phát triển tập trung đạt hiệu quả cao chứ không lan man, hời hợt và màu mè gây thất thoát lãng phí.
 
 Chúng tôi hy vọng có cơ hội được đồng hành với các nhà đầu tư, các mentor nhiều năm kinh nghiệm sau chương trình để dự án có thể phát huy tối đa tiềm năng và sớm đưa được sản phẩm trí tuệ Việt Nam ra thị trường quốc tế.
