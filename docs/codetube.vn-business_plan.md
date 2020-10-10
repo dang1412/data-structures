@@ -1,6 +1,6 @@
 # Codetube.vn Business Plan
 
-## **Tổng quan về sản phẩm**
+## Tổng quan về sản phẩm
 
 ### **Nền tảng chia sẻ kiến thức thương mại hóa**
 
@@ -91,7 +91,7 @@ Quá trình xây dựng sản phẩm bao gồm nhiều module riêng rẽ đư�
 
 ---
 
-## **Ý tưởng**
+## Ý tưởng
 
 - Ý tưởng khởi phát khi tôi đang làm engineer cho 1 công ty và phải giải quyết 1 vấn đề kỹ thuật để làm tăng performance cho thuật toán bằng cách áp dụng cấu trúc dữ liệu dạng cây (btree) để lưu trữ và tìm kiếm dữ liệu. Để hiểu được ý nghĩa cho đến cài đặt và áp dụng thành công thuật toán btree cần rất nhiều thời gian đọc tài liệu cũng như nghiên cứu kỹ tất cả các trường hợp và bản thân đã phải nháp đầy nhiều tờ giấy A4 để cố gắng làm rõ được từng cách chuyển trạng thái. Sau đó khi xem được 1 vài cách biểu diễn thuật toán trực quan trên mạng tôi thấy việc nghiên cứu kỹ các giải thuật phức tạp trở nên hiệu quả hơn nhiều bằng cách này mà không cần nháp bằng tay hay đọc quá nhiều lý thuyết, đồng thời có thể vừa theo sát cách mô phỏng hoạt động vừa code theo nên rất nhanh và chính xác. Tuy nhiên vì chưa hài lòng với các mô phỏng hiện có tôi đã tự làm thử bằng cách sử dụng thư viện D3.js và nhận thấy mình có thể làm đẹp và chi tiết hơn những cái hiện có. Từ đó tôi có động lực tiếp tục nghiên cứu và rủ thêm những người bạn của mình làm mô phỏng thêm nhiều thuật toán khác. Quá trình này giúp chúng tôi ôn lại cũng như hiểu sâu hơn về những cấu trúc dữ liệu và giải thuật mà mình từng học ở đại học nhưng hiệu quả chưa cao.
 
@@ -107,7 +107,7 @@ Với xã hội hiện đại ngày càng ứng dụng nhiều công nghệ như
 
 ---
 
-## **Sản phẩm và dịch vụ**
+## Sản phẩm và dịch vụ
 
 ### **Nền tảng blogging thương mại hóa**
 
@@ -177,9 +177,25 @@ Chúng tôi cung cấp nền tảng chia sẻ kiến thức IT cho cộng đồn
 - Công cụ editor preview theo thời gian thực:
   - Cho phép người dùng **soạn thảo trên web** đồng bộ với nội dung ở nguồn gốc và ngay lập tức xem phần hiển thị trước ở bên cạnh trình soạn thảo.
   - Thanh công cụ hỗ trợ cho phép người dùng không cần nhớ nhiều cú pháp mà chỉ cần bấm nút để nội dung sample tương ứng được thêm vào vị trí hiện tại, người dùng chỉnh sửa các tham số theo ý muốn của mình và kiểm tra kết quả hiển thị.
-  - Bởi vì những nội dung đặc biệt chỉ có hiệu lực khi hiển thị trên web, chúng tôi cung cấp tính năng cho phép người dùng **xuất bản bài viết thành tài liệu độc lập dưới dạng app** desktop, mobile với đầy đủ chức năng hiển thị để có thể sử dụng offline hay chia sẻ cho người khác (*TODO*).
+  - Bởi vì những nội dung đặc biệt chỉ có hiệu lực khi hiển thị trên web, chúng tôi cung cấp tính năng cho phép người dùng **xuất bản bài viết thành tài liệu độc lập dưới dạng app** desktop, mobile với đầy đủ chức năng hiển thị để có thể sử dụng offline hay chia sẻ cho người khác.
 
-- Code và debug trực tiếp trên web, trực quan hóa dữ liệu trạng thái thuật toán ngay trong từng bước debug (*TODO*). Ngoài ra với mục đích giúp giáo viên có thể soạn bài coding test, học sinh làm bài và nộp bài, chúng tôi nghiên cứu cách thức để người dùng tự định nghĩa các bộ dữ liệu input và kết quả để chạy và chấm tự động, đồng thời tạo thêm 1 trang để cho giáo viên quản lý bài nộp của học sinh (*TODO*).
+- **Code và debug trực tiếp trên web**, trực quan hóa dữ liệu trạng thái thuật toán ngay trong từng bước debug.
+  - Giáo viên có thể soạn bài coding test bằng cách viết diễn giải vấn đề và nhúng code IDE với mặc định là function với các tham số và nội dung trống (để cho học sinh cài đặt) vào bài viết ở vị trí mong muốn.
+  - Giáo viên tạo các bộ test input, định nghĩa format input bằng cách viết hàm parse input từ raw string ra các tham số cần thiết.
+  - Giáo viên truy cập trang quản lý tương ứng cho bài test tạo các bộ test để chấm bài và kết quả đúng tương ứng. Hệ thống sẽ dùng thông tin này để thực hiện chạy và chấm bài tự động.
+
+  ```js
+  // input
+  [1,3,5,2]
+  [1,4,3,6,2]
+
+  // expected output
+  [1,2,3,5]
+  [1,2,3,4,6]
+  ```
+
+  - Học sinh truy cập bài viết đọc diễn giải, thực hiện code và chạy thử các bộ test do giáo viên cung cấp hoặc tự mình nhập vào và kiểm tra kết quả. Sau khi hài lòng học sinh bấm nút để nộp bài, có thể thêm chức năng tính thời gian làm bài.
+  - Giáo viên truy cập trang quản lý, xem được list các bài nộp của học sinh, xem kết quả chấm bài tự động cũng như nội dung chi tiết của từng bài.
 
 ```[codeeditor](lang=javascript,height=280px)
 // SelectionSort sorts array of items
@@ -187,11 +203,7 @@ function selectionSort(a) {
   const n = a.length
   for (let i = 0; i < n-1; i++) {
     for (let j = i + 1; j < n; j++) {
-      if (a[j] < a[i]) {
-        let tmp = a[i]
-        a[i] = a[j]
-        a[j] = tmp
-      }
+      // ...code here
     }
   }
 
@@ -201,9 +213,27 @@ function selectionSort(a) {
 selectionSort([3,2,1,4,5])
 ```
 
-- Blockly Programming
+Lời giải
 
-Lập trình cho người mới bắt đầu bằng cách sử dụng các khối xếp hình kéo thả sinh động sử dụng thư viện [Blockly](https://developers.google.com/blockly). Hiện chúng tôi đang nghiên cứu cách thức thực thi các dòng lệnh trên robot hoạt động giả lập trên web (Game điều khiển bằng API kết hợp với blockly) 1 cách trực quan sinh động.
+```javascript
+if (a[j] < a[i]) {
+  let tmp = a[i]
+  a[i] = a[j]
+  a[j] = tmp
+}
+```
+
+- **Blockly Programming**: Lập trình cho người mới bắt đầu bằng cách sử dụng các khối xếp hình kéo thả sinh động sử dụng thư viện [Blockly](https://developers.google.com/blockly). Kết hợp với 1 game nhỏ được thiết kế đơn giản để giả lập thực thi chương trình:
+  - Khi thực thi Block sẽ gọi đến api trong game để kiểm tra điều kiện hay ra lệnh cho nhân vật, ví dụ: ![cat](https://raw.githubusercontent.com/kittykatattack/learningPixi/master/examples/images/screenshots/03.png "Cat game")
+
+  ```js
+  cat.isHitWall()  // điều kiện
+  cat.moveForwad() // hành động
+  cat.turnLeft()   // hành động
+  cat.turnRight()  // hành động
+  ```
+
+  - Xa hơn chúng ta có thể thiết kế những robot (hay thiết bị IOT) được trang bị cảm biến, camera kết hợp với các thuật toán *trí tuệ nhân tạo* để tạo ra những API bậc cao như trên. Người dùng không chuyên hoàn toàn có thể lập trình cho những con robot hay thiết bị này hoạt động theo ý muốn sử dụng phương pháp kéo thả khối trên app 1 cách thuận tiện mà không cần kiến thức chuyên môn. Giúp người dùng (khách hàng) thiết kế ra các bài học hướng dẫn tạo ra các sản phẩm như vậy có thể là hướng đi chủ đạo tiếp theo của chúng tôi trong thời gian tới.
 
 ```[blockly](height=300)
 <!-- This will show blockly drag drop editor on web -->
@@ -223,12 +253,12 @@ Lập trình cho người mới bắt đầu bằng cách sử dụng các khố
 - Slideshow với code animation
 
 ```[slideshow](height=300)
-<!-- This will show some slides with code animation on web -->
+<!-- This will show slides with code animation on web -->
 ```
 
 ### **Khóa học thuật toán trực quan miễn phí**
 
-Trang web là nền tảng mở cho phép mọi đối tượng người dùng có thể tạo khoá học của riêng mình, trong đó khoá học về cấu trúc dữ liệu và giải thuật trực quan sẽ là khoá học đầu tiên gồm các bài viết miễn phí do chúng tôi cung cấp để giúp người dùng học cũng như là sample giúp hình dung được nội dung có thể tạo ra, tạo tiền đề để thu hút người dùng đăng ký trang. Dưới đây là ví dụ về 1 số thành phần trực quan sẽ được chúng tôi sử dụng trong các bài viết này.
+Trang web là nền tảng mở cho phép mọi đối tượng người dùng có thể tạo khoá học của riêng mình bằng cách viết, trong đó khoá học về cấu trúc dữ liệu và giải thuật trực quan sẽ là khoá học đầu tiên gồm các bài viết miễn phí do chúng tôi cung cấp để giúp người dùng học cũng như là sample giúp hình dung được nội dung có thể tạo ra, tạo tiền đề để thu hút người dùng đăng ký trang. Dưới đây là ví dụ về 1 số thành phần trực quan sẽ được chúng tôi sử dụng trong các bài viết này (xem trên web để hiển thị các mô phỏng thuật toán trực quan).
 
 #### Btree
 
@@ -241,6 +271,9 @@ Trang web là nền tảng mở cho phép mọi đối tượng người dùng c
 
 1:(3,6)
 2:(1,2)|3:(4,5)|4:(7,8)
+
+1:(3,6)
+2:(1,2)|3:(4,5)|4:(7,8,10)
 ```
 
 #### Binary Tree
@@ -268,8 +301,8 @@ Trang web là nền tảng mở cho phép mọi đối tượng người dùng c
 Quá trình làm sản phẩm bao gồm nhiều module được tách ra thành những project độc lập và có thể open source để đóng góp cho cộng đồng:
 
 - Cấu trúc dữ liệu và giải thuật cài đặt bằng 1 số ngôn ngữ lập trình phổ biến hiện nay: Go, Typescript, Python, Java.
-- Cấu trúc dữ liệu và giải thuật biểu diễn trực quan dùng thư viện D3.js ( Typescript ).
-  - Gắn logo và link đến trang chủ của chúng tôi trên các biểu diễn trực quan.
+- Cấu trúc dữ liệu và giải thuật mô phỏng trực quan dùng thư viện D3.js ( Typescript ).
+  - Gắn logo và link đến trang chủ của sản phẩm trên các mô phỏng trực quan.
 - Trình biên dịch Markdown viết hoàn toàn bằng Typescript và có khả năng mở rộng cú pháp linh hoạt, đồng thời hỗ trợ render React Component.
 
 ---
@@ -278,10 +311,10 @@ Quá trình làm sản phẩm bao gồm nhiều module được tách ra thành 
 
 Thị trường giáo dục vốn rộng lớn và được dẫn dắt bởi các công ty hàng đầu
 
-- Khóa học trực tuyến: Udemy, Coursera, Brilliant.com
-- Học và thực hành lập trình với blockly: code.org
-- Luyện thuật toán trực tuyến: hackerrank, leetcode
-- Blogging platform: medium.com, ghost.org
+- Khóa học trực tuyến: *Udemy, Coursera, Brilliant.com*.
+- Học và thực hành lập trình với blockly: *code.org*.
+- Luyện code trực tuyến: *hackerrank, leetcode*.
+- Blogging platform: *medium.com, ghost.org*.
 
 Sản phẩm của chúng tôi có khả năng mở rộng linh hoạt có thể giúp người dùng kết hợp nội dung cơ bản của các dịch vụ kể trên vào trong phạm vi 1 bài viết. Với sự đơn giản trong cách dùng và những tính năng sáng tạo (Visual thuật toán, Slideshow với code animation,...) về lâu dài chúng tôi hướng đến thị trường giáo dục rộng lớn bao gồm các cá nhân và tổ chức giúp cho mọi người học tập theo nhiều cách khác nhau.
 
@@ -292,7 +325,7 @@ Những đặc điểm làm nên đăc trưng khó để bắt chước cũng nh
 - Tính kỹ thuật
   - Tính năng Prerender giúp trang chủ load nhanh ngay cả trong môi trường internet tốc độ thấp (view hiển thị trước khi các script nặng được load).
   - Tính năng Lazy load: các thành phần UI đặc biệt có thể nặng đến rất nặng về dung lượng nhưng chỉ được load khi người dùng sử dụng. Do vậy chúng tôi có thể thêm vào tập các thành phần cung cấp mà không sợ ảnh hưởng trải nghiêm của người dùng nếu không dùng đến.
-  - Các thành phần đặc biệt sử dụng bằng cú pháp markdown, được thiết kế với khả năng tuỳ chỉnh cao phát huy khả năng sáng tạo của người dùng.
+  - Các thành phần đặc biệt sử dụng trong bài viết bằng cú pháp markdown mở rộng, được thiết kế với khả năng tuỳ chỉnh cao phát huy khả năng sáng tạo của người dùng.
   - Biểu diễn thuật toán trực quan sử dụng [D3.js](https://d3js.org/)
   - Slideshow với [Reveal.js](https://revealjs.com/)
   - Lập trình [Blockly](https://developers.google.com/blockly) mô phỏng kết quả thực thi bằng cách kết hợp gọi API game viết bằng [Pixi.js](https://www.pixijs.com/)
@@ -316,6 +349,8 @@ Tuy nhiên để khởi đầu chúng tôi chỉ tập trung vào 1 phân khúc 
 ### **Hạn chế**
 
 Các thành phần mô phỏng thuật toán, UI trực quan mà chúng tôi xây dựng khá riêng rẽ và hạn chế về số lượng nên khó đáp ứng những nhu cầu sáng tạo cao hơn của người dùng. Chúng tôi cần nghiên cứu giải pháp tổng quát hơn như cho phép tạo hình, kéo thả và thiết lập các animation chuyển động để người dùng tự do sáng tạo các thành phần đặc biệt của riêng mình. Tuy nhiên giải pháp này không đơn giản, đòi hỏi kỹ thuật cao và nhiều thời gian công sức nghiên cứu, phát triển.
+
+Chúng tôi còn thiếu về mảng điều tra thị trường nên nếu không tìm hiểu kỹ càng để lựa chọn hướng đi thích hợp có thể rơi vào tình cảnh phổ biến của nhiều startup đó là giải quyết các vấn đề phức tạp thú vị mà mình thích nhưng không có nhu cầu thị trường hoặc nhu cầu rất thấp.
 
 ---
 
