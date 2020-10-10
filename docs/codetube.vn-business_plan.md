@@ -354,7 +354,7 @@ Chúng tôi còn thiếu về mảng điều tra thị trường nên nếu khô
 
 ---
 
-## **Trạng thái hiện tại và kế hoạch**
+## Trạng thái hiện tại và kế hoạch
 
 Sản phẩm của chúng tôi mới chỉ ở dạng prototype [demo](https://codetube.vn/editor) các thành phần mà người dùng có thể đưa vào bài viết, và đa phần các ý tưởng được nêu ở trên chưa được thực thi và chưa có dữ liệu khách hàng. Hướng đi của chúng tôi là tìm kiếm các tổ chức giáo dục nhỏ, bắt đầu bằng việc điều tra thấu hiểu nhu cầu giảng dạy từ đó thiết kế trang demo bằng sản phẩm hiện có sao cho phù hợp nhất với nhu cầu khách hàng và đề xuất những hướng đi giúp họ cải thiện hiệu suất, qui trình dạy và học.
 
@@ -373,7 +373,7 @@ Ngoài ra chúng tôi có thể nghiên cứu theo hướng giúp trường họ
 
 ---
 
-## **Team và văn hóa**
+## Team và văn hóa
 
 - Đặng Thanh Tùng
   - Kỹ sư frontend.
