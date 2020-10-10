@@ -384,7 +384,7 @@ Ngoài ra chúng tôi có thể nghiên cứu theo hướng giúp trường họ
   - Phụ trách thiết kế các service backend có thể chịu tải người dùng qui mô lớn ở các giai đoạn sau của dự án.
 
 - David Nguyễn
-  - Tiến sỹ về AI và Robotic tại Úc.
+  - Chuyên gia nghiên cứu về giáo dục AI và Robotic tại Úc.
   - Phụ trách nghiên cứu thị trường và sale, hiện anh đang làm việc trực tiếp với 1 số đơn vị tại Úc để triển khai dự án dạy lập trình robot cho trẻ em.
 
 Ngoài ra chúng tôi cũng đang liên hệ để hợp tác cùng 1 số kỹ sư phần mềm giỏi và có hiểu biết sâu, đam mê trong các lĩnh vực AI, Robotic, IOT. Chúng tôi vốn xuất thân là những lập trình viên dày dạn kinh nghiệm và có năng lực nên phong cách làm việc đã được định hình khá rõ ngay từ ban đầu:
