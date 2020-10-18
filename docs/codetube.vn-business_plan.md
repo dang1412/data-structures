@@ -235,7 +235,7 @@ if (a[j] < a[i]) {
 
   - Xa hơn chúng ta có thể thiết kế những robot (hay thiết bị IOT) được trang bị cảm biến, camera kết hợp với các thuật toán *trí tuệ nhân tạo* để tạo ra những API bậc cao như trên. Người dùng không chuyên hoàn toàn có thể lập trình cho những con robot hay thiết bị này hoạt động theo ý muốn sử dụng phương pháp kéo thả khối trên app 1 cách thuận tiện mà không cần kiến thức chuyên môn. Giúp người dùng (khách hàng) thiết kế ra các bài học hướng dẫn tạo ra các sản phẩm như vậy có thể là hướng đi chủ đạo tiếp theo của chúng tôi trong thời gian tới.
 
-```[blockly](height=300)
+```[blockly](height=300px)
 <!-- This will show blockly drag drop editor on web -->
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style={{display: 'none'}}>
   <block type="controls_if"></block>
