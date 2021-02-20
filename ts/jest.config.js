@@ -11,8 +11,8 @@ module.exports = {
     '^.+\\.ts$': 'ts-jest',
   },
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
-  collectCoverageFrom: ['src/**/*.{js,ts}', '!**/node_modules/**'],
+  collectCoverageFrom: ['**/*.{js,ts}', '!**/node_modules/**'],
   coveragePathIgnorePatterns: ['/node_modules/'],
   coverageReporters: ['json', 'lcov'],
   verbose: true,
-};
+}
