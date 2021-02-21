@@ -5,7 +5,7 @@ const DEFAULT_COMPARATOR: Comparator<any> = (a, b) => {
 }
 
 export class PriorityQueue<T> {
-  private items: T[]
+  private items: T[] = []
 
   constructor(private readonly comparator: Comparator<T> = DEFAULT_COMPARATOR) {}
 
@@ -32,8 +32,10 @@ export class PriorityQueue<T> {
     }
 
     const item = this.items[0]
-    this.items[0] = this.items.pop()
+    const last = this.items.pop()!
+    
     if (!this.isEmpty()) {
+      this.items[0] = last
       this.heapify(0)
     }
 
