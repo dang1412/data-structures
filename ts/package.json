@@ -1,7 +1,7 @@
 {
-  "name": "bplustree-ts",
+  "name": "datastructure-ts",
   "version": "0.0.1",
-  "description": "bplustree implementation in typescript",
+  "description": "Data structures implementation in typescript",
   "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",

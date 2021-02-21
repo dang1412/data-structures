@@ -2,7 +2,7 @@ export class BinaryNode {
   left: BinaryNode | null = null
   right: BinaryNode | null = null
 
-  constructor(private data: number) {}
+  constructor(public data: number) {}
 
   search(data: number): BinaryNode | null {
     if (data === this.data) {
@@ -62,6 +62,42 @@ export class BinaryNode {
     return this
   }
 
+  traverseInOrder(cb: (data: number) => void): void {
+    if (this.left) {
+      this.left.traverseInOrder(cb)
+    }
+
+    cb(this.data)
+
+    if (this.right) {
+      this.right.traverseInOrder(cb)
+    }
+  }
+
+  traversePreOrder(cb: (data: number) => void): void {
+    cb(this.data)
+
+    if (this.left) {
+      this.left.traversePreOrder(cb)
+    }
+
+    if (this.right) {
+      this.right.traversePreOrder(cb)
+    }
+  }
+
+  traversePostOrder(cb: (data: number) => void): void {
+    if (this.left) {
+      this.left.traversePostOrder(cb)
+    }
+
+    if (this.right) {
+      this.right.traversePostOrder(cb)
+    }
+
+    cb(this.data)
+  }
+
   minValue(): number {
     let node = this as BinaryNode
     while (node.left) node = node.left
@@ -84,6 +120,14 @@ export class BinaryTree {
     }
 
     return this.root.insert(data)
+  }
+
+  delete(data: number): void {
+    if (!this.root) {
+      return
+    }
+
+    this.root = this.root.delete(data)
   }
 }
 
